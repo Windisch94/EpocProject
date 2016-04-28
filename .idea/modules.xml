@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/EpocGame.iml" filepath="$PROJECT_DIR$/EpocGame.iml" />
+      <module fileurl="file://$PROJECT_DIR$/EpocProject.iml" filepath="$PROJECT_DIR$/EpocProject.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
