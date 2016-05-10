@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             break;
 
             case R.id.buttonPractise: {
-                Log.i(TAG, "Button B pressed");
+                Log.i(TAG, "Button practise pressed");
                 Intent i = new Intent(this, PractiseActivity.class);
                 startActivity(i);
             }
