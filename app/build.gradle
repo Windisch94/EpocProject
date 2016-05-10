@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 'android-N'
-    buildToolsVersion '24.0.0-rc3'
+    compileSdkVersion 23
+    buildToolsVersion '23.0.2'
 
     defaultConfig {
         applicationId "rr.mc.fhhgb.at.epocgame"
