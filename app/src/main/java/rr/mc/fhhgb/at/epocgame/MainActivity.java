@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.emotiv.insight.IEdk;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "brain2machine";
@@ -15,7 +17,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        IEdk.IEE_EngineConnect(this,"");
         Button button = null;
         button = (Button) findViewById(R.id.buttonPlay);
         button.setOnClickListener(this);
