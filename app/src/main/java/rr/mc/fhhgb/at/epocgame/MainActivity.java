@@ -4,10 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-
-import com.emotiv.insight.IEdk;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -17,7 +18,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        IEdk.IEE_EngineConnect(this,"");
+
+        //IEdk.IEE_EngineConnect(this,"");
         Button button = null;
         button = (Button) findViewById(R.id.buttonPlay);
         button.setOnClickListener(this);
@@ -62,6 +64,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Log.e(TAG, "unknown onClick ID encountered..");
         }
 
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.settings, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+            case R.id.action_favorite:
+                Intent i = new Intent(this, SettingsActivity.class);
+                startActivity(i);
+                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
     }
 
 }

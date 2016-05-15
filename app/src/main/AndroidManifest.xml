@@ -4,21 +4,41 @@
 
     <application
         android:allowBackup="true"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".PlayActivity" />
-        <activity android:name=".PractiseActivity" />
-        <activity android:name=".HowtoActivity" />
-        <activity android:name=".HighscoreActivity"></activity>
+        <activity
+            android:name=".PlayActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".PractiseActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".HowtoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".HighscoreActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="rr.mc.fhhgb.at.epocgame.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
