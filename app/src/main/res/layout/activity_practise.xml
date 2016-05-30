@@ -9,4 +9,64 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="rr.mc.fhhgb.at.epocgame.PractiseActivity">
 
+    <Button
+        android:id="@+id/button_training"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Trainieren"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="74dp" />
+    <RadioGroup
+        android:id="@+id/radioGroup_training"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal">
+
+
+
+        <RadioButton
+            android:id="@+id/radio_neutral"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="Neutral"
+            />
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible" />
+        <RadioButton
+            android:id="@+id/radio_nudge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Anstoßen"
+            />
+
+    </RadioGroup>
+
+    <ProgressBar
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:max="100"
+        android:id="@+id/progress_bar"
+        android:progress="0"
+        android:progressDrawable="@drawable/progress_drawable"
+        android:layout_alignTop="@+id/radioGroup_training"
+        android:layout_alignLeft="@+id/radioGroup_training"
+        android:layout_alignStart="@+id/radioGroup_training" />
+
+    <rr.mc.fhhgb.at.epocgame.AnimatedView
+        android:id="@+id/anim_view"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="5dp"
+        android:layout_height="match_parent"
+        android:layout_alignRight="@+id/radioGroup_training"
+        android:layout_alignEnd="@+id/radioGroup_training"
+        android:layout_above="@+id/button_training"
+        android:layout_below="@+id/radioGroup_training"
+        android:layout_toRightOf="@+id/progress_bar"
+        android:layout_toEndOf="@+id/progress_bar" />
 </RelativeLayout>

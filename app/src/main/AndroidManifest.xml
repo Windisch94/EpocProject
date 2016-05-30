@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="rr.mc.fhhgb.at.epocgame">
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
 
     <application
         android:allowBackup="true"
@@ -38,6 +40,10 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="rr.mc.fhhgb.at.epocgame.MainActivity" />
+        </activity>
+        <activity android:name=".ConnectionActivity"
+            android:screenOrientation="portrait" >
+
         </activity>
     </application>
 
