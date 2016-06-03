@@ -1,6 +1,7 @@
 package rr.mc.fhhgb.at.epocgame;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -9,15 +10,52 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+import com.emotiv.insight.IEmoStateDLL;
+
+import java.util.Timer;
+import java.util.TimerTask;
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, EngineInterface{
 
     private static final String TAG = "brain2machine";
+    EngineConnector engineConnector;
+    TextView batteryStatus;
+    TextView connectionStatus;
     // random comment by ralph
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        batteryStatus = (TextView) findViewById(R.id.batteryText);
+        connectionStatus = (TextView) findViewById(R.id.signalText);
+
+        EngineConnector.setContext(this);
+        engineConnector = EngineConnector.shareInstance();
+        engineConnector.delegate = this;
+        Timer timer = new Timer();
+        TimerTask timerTask = new TimerTask() { // TimerTask für die BatteryConnection
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() { // Update View in Thread
+                    @Override
+                    public void run() {
+                        if (engineConnector.isConnected) {
+                            connectionStatus.setTextColor(Color.parseColor("#2E7D32"));
+                            connectionStatus.setText("Verbunden");
+                            setBatteryStatus(IEmoStateDLL.IS_GetBatteryChargeLevel()[0]);
+                        }else {
+                            connectionStatus.setTextColor(Color.RED);
+                            connectionStatus.setText("Nicht verbunden");
+                            setBatteryStatus(0);
+                        }
+                    }
+                });
+
+            }
+        };
+        timer.schedule(timerTask, 0, 1000);
 
         //IEdk.IEE_EngineConnect(this,"");
         Button button = null;
@@ -29,7 +67,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         button.setOnClickListener(this);
         button = (Button) findViewById(R.id.buttonHighscore);
         button.setOnClickListener(this);
+    }
 
+    /**
+     * Setzt den Batterystatus anhand der ID die geliefert wird
+     * @param id Die ID, die vom System kommt
+     */
+    private void setBatteryStatus(int id) {
+        switch (id) {
+            case -1:
+                //batteryStatus.setText("-");
+                break;
+            case 0:
+                batteryStatus.setText("-");
+                break;
+            case 1:
+                batteryStatus.setText("Akku: 20%");
+                break;
+            case 2:
+                batteryStatus.setText("Akku: 40%");
+                break;
+            case 3:
+                batteryStatus.setText("Akku: 60%");
+                break;
+            case 4:
+                batteryStatus.setText("Akku: 80%");
+                break;
+            case 5:
+                batteryStatus.setText("Akku: 100%");
+                break;
+            default:
+                batteryStatus.setText("-");
+        }
     }
 
     @Override
@@ -92,4 +161,56 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    public void isConnected() {
+
+    }
+    @Override
+    public void trainStarted() {
+
+    }
+
+    @Override
+    public void trainSucceed() {
+
+    }
+
+    @Override
+    public void trainFailed() {
+
+    }
+
+    @Override
+    public void trainCompleted() {
+
+    }
+
+    @Override
+    public void trainRejected() {
+
+    }
+
+    @Override
+    public void trainReset() {
+
+    }
+
+    @Override
+    public void trainErased() {
+
+    }
+
+    @Override
+    public void userAdd(int userId) {
+
+    }
+
+    @Override
+    public void userRemoved() {
+
+    }
+
+    @Override
+    public void currentAction(int typeAction, float power) {
+
+    }
 }
