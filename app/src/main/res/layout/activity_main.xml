@@ -16,7 +16,7 @@
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/frogImage"
+            android:id="@+id/epocImage"
             android:layout_width="match_parent"
             android:layout_height="500px"
             android:layout_gravity="center_vertical|top"
@@ -24,7 +24,7 @@
             android:layout_marginLeft="1dp"
             android:layout_marginRight="1dp"
             android:layout_marginTop="0dp"
-            android:src="@drawable/frog" />
+            android:src="@drawable/epoc" />
 
         <Button
             android:id="@+id/buttonPlay"
@@ -64,24 +64,24 @@
                 android:id="@+id/signalText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nicht verbunden"
-                android:textStyle="bold"
                 android:layout_alignParentLeft="true"
-                android:padding="5dp"
-                android:textAppearance="?android:attr/textAppearanceSmall"
                 android:background="@drawable/border_style"
+                android:padding="5dp"
+                android:text="Nicht verbunden"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textStyle="bold"
                 />
 
             <TextView
                 android:id="@+id/batteryText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Akku: 0%"
                 android:layout_alignParentRight="true"
-                android:textStyle="bold"
-                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:background="@drawable/border_style"
                 android:padding="5dp"
-                android:background="@drawable/border_style"/>
+                android:text="Akku: 0%"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textStyle="bold" />
         </RelativeLayout>
 
 
