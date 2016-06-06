@@ -50,9 +50,9 @@ public class PlayActivity extends AppCompatActivity {
 
 
         Bitmap bm = ((BitmapDrawable) backgroundOne.getDrawable()).getBitmap();
-        bm = EpocQualityView.getResizedBitmap(bm, dm.heightPixels + 40, dm.widthPixels + 200);
+        bm = EpocQualityView.getResizedBitmap(bm, dm.heightPixels + 60, dm.widthPixels + 200);
         Bitmap bm2 = ((BitmapDrawable) backgroundTwo.getDrawable()).getBitmap();
-        bm2 = EpocQualityView.getResizedBitmap(bm2, dm.heightPixels + 40, dm.widthPixels + 200);
+        bm2 = EpocQualityView.getResizedBitmap(bm2, dm.heightPixels + 60, dm.widthPixels + 200);
 
         backgroundOne.setImageBitmap(bm);
         backgroundTwo.setImageBitmap(bm2);

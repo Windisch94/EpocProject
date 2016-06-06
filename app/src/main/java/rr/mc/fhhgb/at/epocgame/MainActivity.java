@@ -1,10 +1,14 @@
 package rr.mc.fhhgb.at.epocgame;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -22,15 +26,18 @@ import java.util.TimerTask;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, EngineInterface{
 
     private static final String TAG = "brain2machine";
+    int MY_PERMISSIONS_REQUEST_BLUETOOTH;
     EngineConnector engineConnector;
     TextView batteryStatus;
     TextView connectionStatus;
     ProgressDialog progressDialog;
+    int MY_PERMISSIONS_REQUEST_ACCESSLOCATION;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        accessPermissions(); //access permissions on runtime for android >6.0
         batteryStatus = (TextView) findViewById(R.id.batteryText);
         connectionStatus = (TextView) findViewById(R.id.signalText);
         connectionStatus.setOnClickListener(new View.OnClickListener() {
@@ -90,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         button = (Button) findViewById(R.id.buttonHighscore);
         button.setOnClickListener(this);
     }
+
 
     /**
      * Setzt den Batterystatus anhand der ID die geliefert wird
@@ -234,5 +242,45 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void currentAction(int typeAction, float power) {
 
+    }
+
+    private void accessPermissions() {
+        // Request & set Permissions
+        //Bluetooth
+        int permissionCheck = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION);
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // No explanation
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_ACCESSLOCATION);
+            }
+        }
+
+        // access fineLocation
+        int permissionCheck2 = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.BLUETOOTH);
+
+        // MainActivity
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.BLUETOOTH)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.BLUETOOTH)) {
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_BLUETOOTH);
+            }
+        }
     }
 }
