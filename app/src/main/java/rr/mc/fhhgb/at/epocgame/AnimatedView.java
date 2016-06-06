@@ -11,26 +11,25 @@ import android.util.AttributeSet;
 import android.widget.ImageView;
 
 public class AnimatedView extends ImageView {
-    private Context mContext;
-    int x = -1;
-    int y = -1;
-    private int xVelocity = 5;
-    private Handler h;
     private final int FRAME_RATE = 30;
     public boolean shouldDraw = false;
-
-    public AnimatedView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        mContext = context;
-        h = new Handler();
-    }
-
     public Runnable r = new Runnable() {
         @Override
         public void run() {
             invalidate();
         }
     };
+    int x = -1;
+    int y = -1;
+    private Context mContext;
+    private int xVelocity = 5;
+    private Handler h;
+
+    public AnimatedView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        mContext = context;
+        h = new Handler();
+    }
 
     public void onDraw(Canvas c) {
         BitmapDrawable ball = (BitmapDrawable) mContext.getResources()
@@ -47,7 +46,6 @@ public class AnimatedView extends ImageView {
             }
         }
 
-
         c.drawBitmap(ball.getBitmap(), x, y, null);
         h.postDelayed(r, FRAME_RATE);
     }
@@ -59,6 +57,10 @@ public class AnimatedView extends ImageView {
     public void reset() {
         this.x = 0;
         this.shouldDraw= false;
+
+    }
+
+    public void stopAnimation(Canvas c) {
 
     }
 }

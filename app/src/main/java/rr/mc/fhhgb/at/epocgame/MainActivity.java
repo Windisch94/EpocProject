@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         }else {
                             connectionStatus.setTextColor(Color.RED);
                             connectionStatus.setText("Nicht verbunden");
+                            // set state so it doesnt jump in between values
                             setBatteryStatus(0);
                          //   progressDialog.show();
 
