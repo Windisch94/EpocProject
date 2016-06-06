@@ -9,9 +9,5 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="rr.mc.fhhgb.at.epocgame.ConnectionActivity">
 
-    <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/paired_devices_list"
-        android:layout_weight="1" />
+
 </LinearLayout>

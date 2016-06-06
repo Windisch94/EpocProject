@@ -1,5 +1,7 @@
 package rr.mc.fhhgb.at.epocgame;
 
+import android.app.ProgressDialog;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -12,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.emotiv.insight.IEdk;
 import com.emotiv.insight.IEmoStateDLL;
 
 import java.util.Timer;
@@ -23,17 +26,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     EngineConnector engineConnector;
     TextView batteryStatus;
     TextView connectionStatus;
-    // random comment by ralph
+    ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         batteryStatus = (TextView) findViewById(R.id.batteryText);
         connectionStatus = (TextView) findViewById(R.id.signalText);
-
+        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (!bluetoothAdapter.isEnabled()) {
+            bluetoothAdapter.enable();
+        }
         EngineConnector.setContext(this);
         engineConnector = EngineConnector.shareInstance();
         engineConnector.delegate = this;
+       // progressDialog = ProgressDialog.show(this,"Verbindungsaufbau","EPOC+ Gerät wird verbunden",true);
         Timer timer = new Timer();
         TimerTask timerTask = new TimerTask() { // TimerTask für die BatteryConnection
             @Override
@@ -45,10 +53,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             connectionStatus.setTextColor(Color.parseColor("#2E7D32"));
                             connectionStatus.setText("Verbunden");
                             setBatteryStatus(IEmoStateDLL.IS_GetBatteryChargeLevel()[0]);
+                           // progressDialog.dismiss();
+                            IEdk.IEE_DataChannel_t[] arriEE_DataChannel_t = IEdk.IEE_DataChannel_t.values();
+                            int test [] = IEmoStateDLL.IS_GetContactQualityFromAllChannels(); //<-- DE METHODE!
+                            String s = "";
+                            for (int d: test
+                                 ) {
+                                s+= d+", ";
+                            }
+                            Log.d("bla",s);
+                          //  Log.d("test","test");
+
                         }else {
                             connectionStatus.setTextColor(Color.RED);
                             connectionStatus.setText("Nicht verbunden");
                             setBatteryStatus(0);
+                         //   progressDialog.show();
+
                         }
                     }
                 });
@@ -126,7 +147,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             break;
             case R.id.buttonHighscore: {
                 Log.i(TAG, "Button highscore pressed");
-                Intent i = new Intent(this, HighscoreActivity.class);
+       //         Intent i = new Intent(this, HighscoreActivity.class);
+                Intent i = new Intent(this,ConnectionActivity.class);
                 startActivity(i);
             }
             break;
