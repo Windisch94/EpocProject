@@ -24,33 +24,68 @@
         android:src="@drawable/background" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/ballImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="184dp"
+        android:layout_below="@+id/buttonMoveBgd"
+        android:layout_marginTop="300dp"
+        android:layout_toStartOf="@+id/buttonMoveBgd"
         android:src="@drawable/ball" />
 
     <Button
-        android:id="@+id/buttonFaster"
+        android:id="@+id/buttonMoveBgd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="55dp"
-        android:text="Schneller" />
+        android:text="Move Bgd" />
 
     <Button
         android:id="@+id/buttonMoveBall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="false"
-        android:layout_alignParentLeft="false"
-        android:layout_alignParentRight="false"
-        android:layout_alignParentStart="false"
-        android:layout_alignParentTop="false"
-        android:layout_centerHorizontal="true"
+        android:layout_alignTop="@+id/buttonMoveBgd"
+        android:layout_toLeftOf="@+id/buttonMoveBgd"
+        android:layout_toStartOf="@+id/buttonMoveBgd"
         android:text="Move Ball" />
+
+    <Button
+        android:id="@+id/buttonStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/buttonMoveBgd"
+        android:layout_toEndOf="@+id/buttonMoveBgd"
+        android:layout_toRightOf="@+id/buttonMoveBgd"
+        android:text="Start" />
+
+    <TextView
+        android:id="@+id/textViewCountdown"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/buttonStart"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/buttonMoveBgd"
+        android:layout_toRightOf="@+id/buttonMoveBgd"
+        android:text="Countdown:"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textViewDistance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/buttonMoveBall"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/buttonMoveBgd"
+        android:layout_toStartOf="@+id/buttonMoveBgd"
+        android:text="Distance:"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textStyle="bold" />
+
 </RelativeLayout>
