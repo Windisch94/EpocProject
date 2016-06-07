@@ -18,7 +18,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.emotiv.insight.IEdk;
 import com.emotiv.insight.IEmoStateDLL;
 
 import java.util.Timer;
@@ -41,6 +40,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         accessPermissions(); //access permissions on runtime for android >6.0
         batteryStatus = (TextView) findViewById(R.id.batteryText);
         connectionStatus = (TextView) findViewById(R.id.signalText);
+        connectionStatus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this,ConnectionActivity.class);
+                startActivity(i);
+            }
+        });
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (!bluetoothAdapter.isEnabled()) {
             bluetoothAdapter.enable();
@@ -59,21 +65,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         if (engineConnector.isConnected) {
                             connectionStatus.setTextColor(Color.parseColor("#2E7D32"));
                             connectionStatus.setText("Verbunden");
+                            connectionStatus.setEnabled(true);
                             setBatteryStatus(IEmoStateDLL.IS_GetBatteryChargeLevel()[0]);
                            // progressDialog.dismiss();
-                            IEdk.IEE_DataChannel_t[] arriEE_DataChannel_t = IEdk.IEE_DataChannel_t.values();
-                            int test [] = IEmoStateDLL.IS_GetContactQualityFromAllChannels(); //<-- DE METHODE!
-                            String s = "";
-                            for (int d: test
-                                 ) {
-                                s+= d+", ";
-                            }
-                            Log.d("bla",s);
-                          //  Log.d("test","test");
+
 
                         }else {
                             connectionStatus.setTextColor(Color.RED);
                             connectionStatus.setText("Nicht verbunden");
+                            connectionStatus.setEnabled(false);
                             // set state so it doesnt jump in between values
                             setBatteryStatus(0);
                          //   progressDialog.show();
@@ -156,8 +156,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             break;
             case R.id.buttonHighscore: {
                 Log.i(TAG, "Button highscore pressed");
-       //         Intent i = new Intent(this, HighscoreActivity.class);
-                Intent i = new Intent(this,ConnectionActivity.class);
+                Intent i = new Intent(this, HighscoreActivity.class);
                 startActivity(i);
             }
             break;
