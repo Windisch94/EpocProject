@@ -19,6 +19,7 @@ public class PractiseActivity extends AppCompatActivity {
     private int progressBarStatus;
     private Handler progressBarHandler = new Handler();
     private boolean isBackAllowed = true;
+    private Thread thread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +41,7 @@ public class PractiseActivity extends AppCompatActivity {
                 }else if(radioTypeButton.getText().equals("Anstoßen")) {
                     av.shouldDraw = true;
                 }
-                new Thread(new Runnable() {
+                thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
                         while(progressBarStatus <100) {
@@ -70,14 +71,23 @@ public class PractiseActivity extends AppCompatActivity {
                             });
                         }
                     }
-                }).start();
+                });
+                thread.start();
 
 
             }
         });
 
-
+        radioTypeGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                thread.stop();
+                progressBarStatus=0;
+            }
+        });
     }
+
+
 
     @Override
     public void onBackPressed() {
