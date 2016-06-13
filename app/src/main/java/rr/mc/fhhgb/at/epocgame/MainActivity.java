@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         EngineConnector.setContext(this);
         engineConnector = EngineConnector.shareInstance();
-        engineConnector.delegate = this;
+        EngineConnector.delegate = this;
        // progressDialog = ProgressDialog.show(this,"Verbindungsaufbau","EPOC+ Gerät wird verbunden",true);
         Timer timer = new Timer();
         TimerTask timerTask = new TimerTask() { // TimerTask für die BatteryConnection
@@ -229,15 +229,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    @Override
-    public void userAdd(int userId) {
-
-    }
-
-    @Override
-    public void userRemoved() {
-
-    }
 
     @Override
     public void currentAction(int typeAction, float power) {
