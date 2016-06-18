@@ -165,22 +165,51 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View _v) {
         switch (_v.getId()) {
             case R.id.buttonPlay: {
-                Log.i(TAG, "Button play pressed");
-                Intent i = new Intent(this, PlayActivity.class);
-                startActivity(i);
+                if(engineConnector == null || !engineConnector.isConnected) {
+                    if(isEPOC) {
+                        alertNotConnected.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent i = new Intent(MainActivity.this, PlayActivity.class);
+                                startActivity(i);
+                            }
+                        });
+                        alertNotConnected.setNegativeButton("Nein",null);
+                        AlertDialog alertDialog = alertNotConnected.create();
+                        alertDialog.show();
+                    }else {
+                        Intent i = new Intent(MainActivity.this, PlayActivity.class);
+                        startActivity(i);
+                    }
+
+                }else {
+                    Intent i = new Intent(MainActivity.this, PlayActivity.class);
+                    startActivity(i);
+                }
             }
             break;
 
             case R.id.buttonPractise: {
                 if(engineConnector == null || !engineConnector.isConnected) {
-                    alertNotConnected.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Intent i = new Intent(MainActivity.this, PractiseActivity.class);
-                            startActivity(i);
-                        }
-                    });
-                    alertNotConnected.setNegativeButton("Nein",null);
+                    if(isEPOC) {
+                        alertNotConnected.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent i = new Intent(MainActivity.this, PractiseActivity.class);
+                                startActivity(i);
+                            }
+                        });
+                        alertNotConnected.setNegativeButton("Nein",null);
+                        AlertDialog alertDialog = alertNotConnected.create();
+                        alertDialog.show();
+                    }else {
+                        Intent i = new Intent(MainActivity.this, PractiseActivity.class);
+                        startActivity(i);
+                    }
+
+                }else {
+                    Intent i = new Intent(MainActivity.this, PractiseActivity.class);
+                    startActivity(i);
                 }
                 Log.i(TAG, "Button practise pressed");
 

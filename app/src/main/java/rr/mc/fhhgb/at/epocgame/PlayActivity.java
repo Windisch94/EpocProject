@@ -90,9 +90,12 @@ public class PlayActivity extends AppCompatActivity implements EngineInterface {
         buttonStart = (Button) findViewById(R.id.buttonStart);
 
         //ab hier
-        engineConnector = EngineConnector.shareInstance();
-        EngineConnector.delegate = this;
-        init();
+        if(MainActivity.isEPOC) {
+            engineConnector = EngineConnector.shareInstance();
+            EngineConnector.delegate = this;
+        }
+
+        //init();
         imgBox = (ImageView) findViewById(R.id.ballImage);
 
 
