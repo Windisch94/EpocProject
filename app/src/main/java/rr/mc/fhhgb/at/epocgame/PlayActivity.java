@@ -95,6 +95,7 @@ public class PlayActivity extends AppCompatActivity implements EngineInterface {
         init();
         imgBox = (ImageView) findViewById(R.id.ballImage);
 
+
         buttonStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

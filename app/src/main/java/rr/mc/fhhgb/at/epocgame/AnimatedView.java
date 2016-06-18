@@ -34,6 +34,7 @@ public class AnimatedView extends ImageView {
     public void onDraw(Canvas c) {
         BitmapDrawable ball = (BitmapDrawable) mContext.getResources()
                 .getDrawable(R.drawable.ball_practise);
+
         if (x < 0 && y < 0) {
             x = 0;
             y = this.getHeight() - this.getHeight() / 3;
@@ -60,7 +61,5 @@ public class AnimatedView extends ImageView {
 
     }
 
-    public void stopAnimation(Canvas c) {
 
-    }
 }

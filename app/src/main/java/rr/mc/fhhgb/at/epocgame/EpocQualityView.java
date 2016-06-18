@@ -10,7 +10,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 
-import com.emotiv.insight.IEmoStateDLL;
+import java.util.Random;
 
 /**
  * Created by Windisch on 06.06.2016.
@@ -23,8 +23,13 @@ public class EpocQualityView extends View {
     public Runnable r = new Runnable() {
         @Override
         public void run() {
+            //qualityValues = IEmoStateDLL.IS_GetContactQualityFromAllChannels();//<-- DE METHODE!
+            for(int i=0;i<qualityValues.length;i++) {
+                Random r = new Random();
+                qualityValues[i] = r.nextInt(5)+1;
+            }
             invalidate();
-            qualityValues = IEmoStateDLL.IS_GetContactQualityFromAllChannels(); //<-- DE METHODE!
+
             String s = "";
             for (int d: qualityValues
                     ) {
@@ -42,7 +47,7 @@ public class EpocQualityView extends View {
         options.inJustDecodeBounds = false;
         options.inSampleSize = 2;
         headBitmap = BitmapFactory.decodeResource(context.getResources(),R.drawable.head_epoc,options);
-        this.headBitmap = EpocQualityView.getResizedBitmap(this.headBitmap,metrics.heightPixels-300,metrics.widthPixels);
+        this.headBitmap = EpocQualityView.getResizedBitmap(this.headBitmap,metrics.heightPixels-200,metrics.widthPixels);
         imageQualityList[0] = BitmapFactory.decodeResource(context.getResources(),R.drawable.no_signal_epoc);
         imageQualityList[0] = EpocQualityView.getResizedBitmap(imageQualityList[0],70,70);
         imageQualityList[1] = BitmapFactory.decodeResource(context.getResources(),R.drawable.bad_signal_epoc);
@@ -61,8 +66,8 @@ public class EpocQualityView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        int x = 10;
-        int y = 35;
+        int x = 0;
+        int y = 0;
         canvas.drawBitmap(headBitmap,0,25,null);
 
         for (int i =0; i<16;i++) {
@@ -71,24 +76,43 @@ public class EpocQualityView extends View {
             }
 
 
-            draw(canvas,this.qualityValues[i],x,y);
+            //draw(canvas,this.qualityValues[i],x,y);
             x+=70;
             if(x==this.getWidth()) {
                 x = 0;
                 y+=70;
             }
         }
+        draw(canvas,this.qualityValues[0],this.getWidth()/8,this.getHeight()/2); // CMS
+        draw(canvas,this.qualityValues[1],this.getWidth()-this.getWidth()/8-imageQualityList[0].getWidth(),this.getHeight()/2); //DRL
+        draw(canvas,this.qualityValues[2],this.getWidth()/4,this.getHeight()/8); //AF3
+        draw(canvas,this.qualityValues[3],this.getWidth()/15,this.getHeight()/4); //F7
+        draw(canvas,this.qualityValues[4],this.getWidth()/3,this.getHeight()/4); //F3
+        draw(canvas,this.qualityValues[5],this.getWidth()/5,this.getHeight()/3); //FC5
+        draw(canvas,this.qualityValues[6],0,this.getHeight()/2.5f); //T7
+        draw(canvas,this.qualityValues[7],this.getWidth()/5.5f,this.getHeight()/1.5f); //P7
+        draw(canvas,this.qualityValues[8],this.getWidth()/3,this.getHeight()/1.2f); //O1
+        draw(canvas,this.qualityValues[9],this.getWidth()-this.getWidth()/3-imageQualityList[0].getWidth(),this.getHeight()/1.2f); //O2
+        draw(canvas,this.qualityValues[10],this.getWidth()-this.getWidth()/5.5f-imageQualityList[0].getWidth(),this.getHeight()/1.5f); //P8
+        draw(canvas,this.qualityValues[11],this.getWidth()-imageQualityList[0].getWidth(),this.getHeight()/2.5f); //T8
+        draw(canvas,this.qualityValues[12],this.getWidth()-this.getWidth()/5-imageQualityList[0].getWidth(),this.getHeight()/3); //FC6
+        draw(canvas,this.qualityValues[13],this.getWidth()-this.getWidth()/3-imageQualityList[0].getWidth(),this.getHeight()/4); //F4
+        draw(canvas,this.qualityValues[14],this.getWidth()-this.getWidth()/15-imageQualityList[0].getWidth(),this.getHeight()/4); //F8
+        draw(canvas,this.qualityValues[15],this.getWidth()-this.getWidth()/4-imageQualityList[0].getWidth(),this.getHeight()/8); //AF4
 
-        h.postDelayed(r,1000);
+
+
+        h.postDelayed(r,2000);
 
     }
 
-    public void draw(Canvas canvas, int value, int x, int y) {
+    public void draw(Canvas canvas, int value, float x, float y) {
         switch (value) {
             case 0: canvas.drawBitmap(this.imageQualityList[0],x,y,null); break;
             case 1: canvas.drawBitmap(this.imageQualityList[1],x,y,null); break;
             case 2: canvas.drawBitmap(this.imageQualityList[2],x,y,null); break;
             case 3: canvas.drawBitmap(this.imageQualityList[3],x,y,null); break;
+
             default: break;
         }
     }

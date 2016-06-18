@@ -3,12 +3,14 @@ package rr.mc.fhhgb.at.epocgame;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -26,17 +28,48 @@ import java.util.TimerTask;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, EngineInterface{
 
     private static final String TAG = "brain2machine";
+    static boolean isEPOC = false;
     int MY_PERMISSIONS_REQUEST_BLUETOOTH;
     EngineConnector engineConnector;
     TextView batteryStatus;
     TextView connectionStatus;
     ProgressDialog progressDialog;
     int MY_PERMISSIONS_REQUEST_ACCESSLOCATION;
+    AlertDialog.Builder alertNotConnected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //Alert for no Connection
+        alertNotConnected = new AlertDialog.Builder(this);
+        alertNotConnected.setMessage("Du bist nicht mit einem EPOC+ Gerät verbunden, trotzdem fortfahren?");
+
+
+        //Alert for Connection to EPOC+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("Willst du dich mit einem EPOC+ Gerät verbinden?");
+        alertDialogBuilder.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                isEPOC= true;
+                EngineConnector.setContext(MainActivity.this);
+                engineConnector = EngineConnector.shareInstance();
+                EngineConnector.delegate = MainActivity.this;
+                BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+                if (!bluetoothAdapter.isEnabled()) {
+                    bluetoothAdapter.enable();
+                }
+            }
+        });
+        alertDialogBuilder.setNegativeButton("Nein", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                isEPOC=false;
+            }
+        });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
         accessPermissions(); //access permissions on runtime for android >6.0
         batteryStatus = (TextView) findViewById(R.id.batteryText);
         connectionStatus = (TextView) findViewById(R.id.signalText);
@@ -47,13 +80,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(i);
             }
         });
-        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (!bluetoothAdapter.isEnabled()) {
-            bluetoothAdapter.enable();
-        }
-        EngineConnector.setContext(this);
-        engineConnector = EngineConnector.shareInstance();
-        EngineConnector.delegate = this;
+
+
        // progressDialog = ProgressDialog.show(this,"Verbindungsaufbau","EPOC+ Gerät wird verbunden",true);
         Timer timer = new Timer();
         TimerTask timerTask = new TimerTask() { // TimerTask für die BatteryConnection
@@ -62,22 +90,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 runOnUiThread(new Runnable() { // Update View in Thread
                     @Override
                     public void run() {
-                        if (engineConnector.isConnected) {
-                            connectionStatus.setTextColor(Color.parseColor("#2E7D32"));
-                            connectionStatus.setText("Verbunden");
-                            connectionStatus.setEnabled(true);
-                            setBatteryStatus(IEmoStateDLL.IS_GetBatteryChargeLevel()[0]);
-                           // progressDialog.dismiss();
+                        if (engineConnector!= null) {
+                            if (engineConnector.isConnected) {
+                                connectionStatus.setTextColor(Color.parseColor("#2E7D32"));
+                                connectionStatus.setText("Verbunden");
+                                connectionStatus.setEnabled(true);
+                                setBatteryStatus(IEmoStateDLL.IS_GetBatteryChargeLevel()[0]);
+                                // progressDialog.dismiss();
 
 
-                        }else {
-                            connectionStatus.setTextColor(Color.RED);
-                            connectionStatus.setText("Nicht verbunden");
-                            connectionStatus.setEnabled(false);
-                            // set state so it doesnt jump in between values
-                            setBatteryStatus(0);
-                         //   progressDialog.show();
+                            } else {
+                                connectionStatus.setTextColor(Color.RED);
+                                connectionStatus.setText("Nicht verbunden");
+                               // connectionStatus.setEnabled(false);
+                                // set state so it doesnt jump in between values
+                                setBatteryStatus(0);
+                                //   progressDialog.show();
 
+                            }
                         }
                     }
                 });
@@ -142,9 +172,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             break;
 
             case R.id.buttonPractise: {
+                if(engineConnector == null || !engineConnector.isConnected) {
+                    alertNotConnected.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent i = new Intent(MainActivity.this, PractiseActivity.class);
+                            startActivity(i);
+                        }
+                    });
+                    alertNotConnected.setNegativeButton("Nein",null);
+                }
                 Log.i(TAG, "Button practise pressed");
-                Intent i = new Intent(this, PractiseActivity.class);
-                startActivity(i);
+
             }
             break;
 

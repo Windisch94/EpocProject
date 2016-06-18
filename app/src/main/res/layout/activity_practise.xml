@@ -58,15 +58,23 @@
         android:layout_alignLeft="@+id/radioGroup_training"
         android:layout_alignStart="@+id/radioGroup_training" />
 
-    <rr.mc.fhhgb.at.epocgame.AnimatedView
-        android:id="@+id/anim_view"
-        android:layout_width="match_parent"
-        android:layout_marginLeft="5dp"
-        android:layout_height="match_parent"
-        android:layout_alignRight="@+id/radioGroup_training"
-        android:layout_alignEnd="@+id/radioGroup_training"
-        android:layout_above="@+id/button_training"
-        android:layout_below="@+id/radioGroup_training"
-        android:layout_toRightOf="@+id/progress_bar"
-        android:layout_toEndOf="@+id/progress_bar" />
+    <!--<rr.mc.fhhgb.at.epocgame.AnimatedView-->
+        <!--android:id="@+id/anim_view"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_marginLeft="5dp"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_alignRight="@+id/radioGroup_training"-->
+        <!--android:layout_alignEnd="@+id/radioGroup_training"-->
+        <!--android:layout_above="@+id/button_training"-->
+        <!--android:layout_below="@+id/radioGroup_training"-->
+        <!--android:layout_toRightOf="@+id/progress_bar"-->
+        <!--android:layout_toEndOf="@+id/progress_bar" />-->
+
+    <ImageView
+        android:src="@drawable/ball_practise"
+        android:id="@+id/ballPractise"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerVertical="true"
+        android:layout_toStartOf="@+id/button_training" />
 </RelativeLayout>
