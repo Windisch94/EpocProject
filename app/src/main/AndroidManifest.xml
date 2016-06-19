@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="rr.mc.fhhgb.at.epocgame">
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
+
+    <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
@@ -13,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,30 +23,30 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".PlayActivity"
+            android:name=".activities.PlayActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".PractiseActivity"
+            android:name=".activities.PractiseActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".HowtoActivity"
+            android:name=".activities.HowtoActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".HighscoreActivity"
+            android:name=".activities.HighscoreActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".SettingsActivity"
+            android:name=".activities.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="rr.mc.fhhgb.at.epocgame.MainActivity" />
+                android:value=".activities.MainActivity" />
         </activity>
-        <activity android:name=".ConnectionActivity"
-            android:screenOrientation="portrait" >
-
-        </activity>
+        <activity
+            android:name=".activities.ConnectionActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activities.TestPlayActivity"></activity>
     </application>
 
 </manifest>

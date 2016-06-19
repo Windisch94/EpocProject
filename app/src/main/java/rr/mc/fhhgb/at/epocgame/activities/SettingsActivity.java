@@ -1,4 +1,4 @@
-package rr.mc.fhhgb.at.epocgame;
+package rr.mc.fhhgb.at.epocgame.activities;
 
 
 import android.annotation.TargetApi;
@@ -20,6 +20,8 @@ import android.text.TextUtils;
 import android.view.MenuItem;
 
 import java.util.List;
+
+import rr.mc.fhhgb.at.epocgame.R;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On

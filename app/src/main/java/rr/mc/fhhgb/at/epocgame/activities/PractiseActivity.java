@@ -1,4 +1,4 @@
-package rr.mc.fhhgb.at.epocgame;
+package rr.mc.fhhgb.at.epocgame.activities;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,6 +16,8 @@ import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+
+import rr.mc.fhhgb.at.epocgame.R;
 
 public class PractiseActivity extends AppCompatActivity {
 
@@ -156,12 +158,11 @@ public class PractiseActivity extends AppCompatActivity {
 
         t = new TranslateAnimation(left,left+300,top,top);
         t.setDuration(2000);
-        t.setFillAfter(true);
         t.setRepeatMode(Animation.REVERSE);
         t.setRepeatCount(Animation.INFINITE);
         animationSet = new AnimationSet(false);
         animationSet.addAnimation(r);
-        animationSet.addAnimation(t);
+       // animationSet.addAnimation(t);
     }
 
     public void initRotateAnimation() {
@@ -170,8 +171,6 @@ public class PractiseActivity extends AppCompatActivity {
         r.setRepeatCount(Animation.INFINITE);
         r.setRepeatMode(Animation.RESTART);
         r.setDuration(1500);
-        r.setFillEnabled(true);
-        r.setFillAfter(true);
         animationSet = new AnimationSet(false);
         animationSet.addAnimation(r);
     }

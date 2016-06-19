@@ -1,4 +1,4 @@
-package rr.mc.fhhgb.at.epocgame;
+package rr.mc.fhhgb.at.epocgame.activities;
 
 import android.animation.ValueAnimator;
 import android.graphics.Bitmap;
@@ -21,6 +21,11 @@ import com.emotiv.insight.IEmoStateDLL;
 
 import java.util.Timer;
 import java.util.TimerTask;
+
+import rr.mc.fhhgb.at.epocgame.model.EngineConnector;
+import rr.mc.fhhgb.at.epocgame.model.EngineInterface;
+import rr.mc.fhhgb.at.epocgame.R;
+import rr.mc.fhhgb.at.epocgame.views.EpocQualityView;
 
 public class PlayActivity extends AppCompatActivity implements EngineInterface {
 

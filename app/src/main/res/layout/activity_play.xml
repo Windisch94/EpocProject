@@ -7,7 +7,7 @@
     android:paddingLeft="0dp"
     android:paddingRight="0dp"
     android:paddingTop="0dp"
-    tools:context="rr.mc.fhhgb.at.epocgame.PlayActivity">
+    tools:context=".activities.PlayActivity">
 
 
 

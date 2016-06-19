@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="rr.mc.fhhgb.at.epocgame.activities.TestPlayActivity">
+
+    <rr.mc.fhhgb.at.epocgame.views.BackgroundView
+        android:id="@+id/backgroundView"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start"
+        android:id="@+id/startButton"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:paddingBottom="30dp"
+        android:id="@+id/linearLayout">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/playBallImage"
+            android:background="@drawable/ball_practise"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            />
+    </LinearLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Schneller"
+        android:id="@+id/nudgeButton"
+        android:layout_above="@+id/startButton"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/distanceTV"
+        android:text="Distanz: 0m"
+        android:layout_alignParentLeft="true"
+        android:textSize="25sp"
+        android:layout_alignParentStart="true"
+        android:textStyle="bold"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/timeTV"
+        android:text="Zeit: 20 sek."
+        android:layout_alignParentRight="true"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp"/>
+
+
+</RelativeLayout>

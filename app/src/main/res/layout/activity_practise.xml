@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="rr.mc.fhhgb.at.epocgame.PractiseActivity">
+    tools:context=".activities.PractiseActivity">
 
     <Button
         android:id="@+id/button_training"
@@ -58,7 +58,7 @@
         android:layout_alignLeft="@+id/radioGroup_training"
         android:layout_alignStart="@+id/radioGroup_training" />
 
-    <!--<rr.mc.fhhgb.at.epocgame.AnimatedView-->
+    <!--<rr.mc.fhhgb.at.epocgame.views.AnimatedView-->
         <!--android:id="@+id/anim_view"-->
         <!--android:layout_width="match_parent"-->
         <!--android:layout_marginLeft="5dp"-->

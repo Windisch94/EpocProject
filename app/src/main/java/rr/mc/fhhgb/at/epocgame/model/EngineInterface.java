@@ -1,4 +1,4 @@
-package rr.mc.fhhgb.at.epocgame;
+package rr.mc.fhhgb.at.epocgame.model;
 
 public interface EngineInterface {
 	//train

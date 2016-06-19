@@ -1,4 +1,4 @@
-package rr.mc.fhhgb.at.epocgame;
+package rr.mc.fhhgb.at.epocgame.activities;
 
 import android.Manifest;
 import android.app.ProgressDialog;
@@ -25,7 +25,11 @@ import com.emotiv.insight.IEmoStateDLL;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, EngineInterface{
+import rr.mc.fhhgb.at.epocgame.model.EngineConnector;
+import rr.mc.fhhgb.at.epocgame.model.EngineInterface;
+import rr.mc.fhhgb.at.epocgame.R;
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, EngineInterface {
 
     private static final String TAG = "brain2machine";
     static boolean isEPOC = false;
@@ -218,7 +222,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.buttonHowto: {
                 Log.i(TAG, "Button howto pressed");
-                Intent i = new Intent(this, HowtoActivity.class);
+                Intent i = new Intent(this, TestPlayActivity.class);
                 startActivity(i);
             }
             break;

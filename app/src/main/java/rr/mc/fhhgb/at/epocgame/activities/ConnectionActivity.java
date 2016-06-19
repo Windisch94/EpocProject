@@ -1,10 +1,12 @@
-package rr.mc.fhhgb.at.epocgame;
+package rr.mc.fhhgb.at.epocgame.activities;
 
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.View;
+
+import rr.mc.fhhgb.at.epocgame.views.EpocQualityView;
 
 public class ConnectionActivity extends AppCompatActivity {
 

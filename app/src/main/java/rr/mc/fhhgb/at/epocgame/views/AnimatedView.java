@@ -1,4 +1,4 @@
-package rr.mc.fhhgb.at.epocgame;
+package rr.mc.fhhgb.at.epocgame.views;
 
 /**
  * Created by Windisch on 30.05.2016.
@@ -9,6 +9,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.widget.ImageView;
+
+import rr.mc.fhhgb.at.epocgame.R;
 
 public class AnimatedView extends ImageView {
     private final int FRAME_RATE = 30;

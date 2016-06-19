@@ -1,4 +1,4 @@
-package rr.mc.fhhgb.at.epocgame;
+package rr.mc.fhhgb.at.epocgame.views;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.View;
 
 import java.util.Random;
+
+import rr.mc.fhhgb.at.epocgame.R;
 
 /**
  * Created by Windisch on 06.06.2016.
@@ -46,7 +48,7 @@ public class EpocQualityView extends View {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = false;
         options.inSampleSize = 2;
-        headBitmap = BitmapFactory.decodeResource(context.getResources(),R.drawable.head_epoc,options);
+        headBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.head_epoc,options);
         this.headBitmap = EpocQualityView.getResizedBitmap(this.headBitmap,metrics.heightPixels-200,metrics.widthPixels);
         imageQualityList[0] = BitmapFactory.decodeResource(context.getResources(),R.drawable.no_signal_epoc);
         imageQualityList[0] = EpocQualityView.getResizedBitmap(imageQualityList[0],70,70);
