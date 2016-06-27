@@ -25,9 +25,9 @@ import com.emotiv.insight.IEmoStateDLL;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import rr.mc.fhhgb.at.epocgame.R;
 import rr.mc.fhhgb.at.epocgame.model.EngineConnector;
 import rr.mc.fhhgb.at.epocgame.model.EngineInterface;
-import rr.mc.fhhgb.at.epocgame.R;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, EngineInterface {
 
@@ -37,9 +37,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     EngineConnector engineConnector;
     TextView batteryStatus;
     TextView connectionStatus;
+    TextView username;
     ProgressDialog progressDialog;
     int MY_PERMISSIONS_REQUEST_ACCESSLOCATION;
     AlertDialog.Builder alertNotConnected;
+    //SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +79,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         accessPermissions(); //access permissions on runtime for android >6.0
         batteryStatus = (TextView) findViewById(R.id.batteryText);
         connectionStatus = (TextView) findViewById(R.id.signalText);
+        username = (TextView) findViewById(R.id.textViewName);
+
+        // Wenn hier versucht wird Name ins textfield zu schreiben, Textfeld im .xml zurzeit entfernt
+
+        //username.setText(preferences.getString("Name", ""));
         connectionStatus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

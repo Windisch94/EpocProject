@@ -31,7 +31,8 @@
         android:layout_below="@+id/buttonMoveBgd"
         android:layout_marginTop="300dp"
         android:layout_toStartOf="@+id/buttonMoveBgd"
-        android:src="@drawable/ball" />
+        android:src="@drawable/ball"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/buttonMoveBgd"
@@ -87,5 +88,12 @@
         android:text="Distance:"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textStyle="bold" />
+
+    <rr.mc.fhhgb.at.epocgame.AnimatedView
+        android:id="@+id/animated_view"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/buttonMoveBgd"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
