@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         alertNotConnected.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Intent i = new Intent(MainActivity.this, PlayActivity.class);
+                                Intent i = new Intent(MainActivity.this, TestPlayActivity.class);
                                 startActivity(i);
                             }
                         });
@@ -182,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         AlertDialog alertDialog = alertNotConnected.create();
                         alertDialog.show();
                     }else {
-                        Intent i = new Intent(MainActivity.this, PlayActivity.class);
+                        Intent i = new Intent(MainActivity.this, TestPlayActivity.class);
                         startActivity(i);
                     }
 

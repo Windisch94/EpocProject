@@ -41,7 +41,7 @@ public class PractiseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_practise);
         ballImage = (ImageView) findViewById(R.id.ballPractise);
-        initRotateAndTranslateAnimation();
+        //initRotateAndTranslateAnimation();
 
 
         btn_train = (Button) findViewById(R.id.button_training);
@@ -148,7 +148,6 @@ public class PractiseActivity extends AppCompatActivity {
         r.setRepeatCount(Animation.INFINITE);
         r.setRepeatMode(Animation.RESTART);
         r.setDuration(1500);
-        RotateAnimation r2 = new RotateAnimation(0,359,Animation.RELATIVE_TO_SELF,0.5f,Animation.RELATIVE_TO_SELF,0.5f);
 
         int left = ballImage.getLeft();
         int top = ballImage.getTop();
@@ -156,13 +155,14 @@ public class PractiseActivity extends AppCompatActivity {
         DisplayMetrics metrics = this.getResources().getDisplayMetrics();
         int width = metrics.widthPixels;
 
-        t = new TranslateAnimation(left,left+300,top,top);
+        t = new TranslateAnimation(0,width - right-30,0,0); // 30 padding
+
         t.setDuration(2000);
         t.setRepeatMode(Animation.REVERSE);
         t.setRepeatCount(Animation.INFINITE);
         animationSet = new AnimationSet(false);
         animationSet.addAnimation(r);
-       // animationSet.addAnimation(t);
+        animationSet.addAnimation(t);
     }
 
     public void initRotateAnimation() {

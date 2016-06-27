@@ -1,14 +1,19 @@
 package rr.mc.fhhgb.at.epocgame.activities;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,6 +26,8 @@ public class TestPlayActivity extends AppCompatActivity {
     private BackgroundView bgv;
     private ImageView ballImageView;
     private RotateAnimation r;
+    private AnimationSet animationSet;
+    private TranslateAnimation t;
     public TextView distanceTV;
     public TextView timeTV;
     private Button startButton;
@@ -38,7 +45,8 @@ public class TestPlayActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                     bgv.getBackgroundModel().setSpeed(5);
-                    ballImageView.startAnimation(r);
+                    initRotateAnimation();
+                    ballImageView.startAnimation(animationSet);
                     startButton.setAlpha(0);
                     startButton.setEnabled(false);
                 new CountDownTimer(20000, 1000) {
@@ -52,7 +60,7 @@ public class TestPlayActivity extends AppCompatActivity {
                     }
 
                     public void onFinish() {
-                        timeTV.setText("end!");
+                        timeTV.setText("Zeit: 20 sek.");
                         bgv.getBackgroundModel().setSpeed(0);
 
                         ballImageView.clearAnimation();
@@ -60,10 +68,17 @@ public class TestPlayActivity extends AppCompatActivity {
                         startButton.setEnabled(true);
                         AlertDialog.Builder doneDialog = new AlertDialog.Builder(TestPlayActivity.this);
                         doneDialog.setMessage("Gratulation! Du hast eine Weite von "+bgv.getBackgroundModel().distance+" Metern erreicht!");
-                        doneDialog.setNeutralButton("Ok",null);
+                        doneDialog.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent i = new Intent(TestPlayActivity.this, HighscoreActivity.class);
+                                startActivity(i);
+                            }
+                        });
                         bgv.getBackgroundModel().distance = 0;
                         AlertDialog alertDialog = doneDialog.create();
                         alertDialog.show();
+
 
 
 
@@ -77,12 +92,14 @@ public class TestPlayActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 bgv.getBackgroundModel().speedUp();
+                initRotateAndTranslateAnimation();
+                ballImageView.startAnimation(animationSet);
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        r.setDuration(500);
-                        try {
-                            Thread.sleep(1000);
+                        //r.setDuration(500);
+                        /*try {
+                            *//*Thread.sleep(1000);
                             r.setDuration(700);
                             Thread.sleep(1000);
                             r.setDuration(900);
@@ -91,10 +108,11 @@ public class TestPlayActivity extends AppCompatActivity {
                             Thread.sleep(1000);
                             r.setDuration(1300);
                             Thread.sleep(1000);
-                            r.setDuration(1500);
+                            r.setDuration(1500);*//*
                         } catch (InterruptedException e) {
                             e.printStackTrace();
-                        }
+                        }*/
+
                     }
                 }).start();
 
@@ -126,7 +144,21 @@ public class TestPlayActivity extends AppCompatActivity {
         r.setRepeatMode(Animation.RESTART);
         r.setDuration(1500);
 
-        //animationSet = new AnimationSet(false);
-        //animationSet.addAnimation(r);
+
+        animationSet = new AnimationSet(false);
+        animationSet.addAnimation(r);
+
+    }
+
+    public void initRotateAndTranslateAnimation() {
+        DisplayMetrics metrics = this.getResources().getDisplayMetrics();
+        t = new TranslateAnimation(0,metrics.widthPixels/2,0,0); // 30 padding
+
+        t.setDuration(2500);
+        t.setRepeatMode(Animation.REVERSE);
+
+        animationSet = new AnimationSet(false);
+        animationSet.addAnimation(r);
+        animationSet.addAnimation(t);
     }
 }
