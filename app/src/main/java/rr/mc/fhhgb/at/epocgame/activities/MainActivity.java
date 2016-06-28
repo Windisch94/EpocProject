@@ -10,7 +10,6 @@ import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -69,29 +68,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (!bluetoothAdapter.isEnabled()) {
                     bluetoothAdapter.enable();
                 }
-                new CountDownTimer(20000,1000) { // Connection Timeout
-
-                    /**
-                     * Callback fired on regular interval.
-                     *
-                     * @param millisUntilFinished The amount of time until finished.
-                     */
-                    @Override
-                    public void onTick(long millisUntilFinished) {
-
-                    }
-
-                    /**
-                     * Callback fired when the time is up.
-                     */
-                    @Override
-                    public void onFinish() {
-                        isEPOC = false;
-                        progressDialog.dismiss();
-                        alertDialog.show();
-
-                    }
-                }.start();
             }
         });
         alertDialogBuilder.setNegativeButton("Nein", new DialogInterface.OnClickListener() {
