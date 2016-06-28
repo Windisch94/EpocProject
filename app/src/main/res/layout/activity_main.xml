@@ -27,7 +27,7 @@
         <ImageView
             android:id="@+id/epocImage"
             android:layout_width="match_parent"
-            android:layout_height="500px"
+            android:layout_height="400px"
             android:layout_gravity="center_vertical|top"
             android:layout_marginBottom="1dp"
             android:layout_marginLeft="1dp"
