@@ -3,7 +3,6 @@ package rr.mc.fhhgb.at.epocgame.activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -14,8 +13,8 @@ import rr.mc.fhhgb.at.epocgame.R;
 public class UsernameActivity extends AppCompatActivity implements View.OnClickListener {
 
 
-    public SharedPreferences preferences;
-    EditText name;
+
+    EditText nameET;
     Button button;
 
     @Override
@@ -23,20 +22,26 @@ public class UsernameActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_username);
 
+        SharedPreferences preferences = getSharedPreferences("username",MODE_PRIVATE);
+        String name = preferences.getString("Name",null);
         button = (Button) findViewById(R.id.btnApply);
         button.setOnClickListener(this);
 
-        name = (EditText) findViewById(R.id.txtName);
+        nameET = (EditText) findViewById(R.id.txtName);
+
+        if (name != null) {
+            nameET.setText(name);
+        }
 
     }
 
 
     @Override
     public void onClick(View v) {
-        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences preferences = getSharedPreferences("username",MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putString("Name", String.valueOf(name.getText()));
-        editor.apply();
+        editor.putString("Name", String.valueOf(nameET.getText()));
+        editor.commit();
 
         Intent i = new Intent(UsernameActivity.this, MainActivity.class);
         startActivity(i);

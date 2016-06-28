@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     EngineConnector engineConnector;
     TextView batteryStatus;
     TextView connectionStatus;
+    TextView usernameTV;
     ProgressDialog progressDialog;
     int MY_PERMISSIONS_REQUEST_ACCESSLOCATION;
     AlertDialog.Builder alertNotConnected;
@@ -103,6 +105,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         accessPermissions(); //access permissions on runtime for android >6.0
         batteryStatus = (TextView) findViewById(R.id.batteryText);
         connectionStatus = (TextView) findViewById(R.id.signalText);
+        usernameTV = (TextView) findViewById(R.id.usernameTV);
+        SharedPreferences preferences = getSharedPreferences("username",MODE_PRIVATE);
+        String username;
+        if ((username = preferences.getString("Name",null)) != null) {
+            usernameTV.setText("Eingeloggt als: "+username);
+        }
         connectionStatus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

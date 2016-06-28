@@ -2,6 +2,7 @@ package rr.mc.fhhgb.at.epocgame.activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -68,13 +69,18 @@ public class PlayActivity extends AppCompatActivity {
                         ballImageView.clearAnimation();
                         startButton.setAlpha(1);
                         startButton.setEnabled(true);
+                        final String username;
+                        SharedPreferences preferences = getSharedPreferences("username",MODE_PRIVATE);
+                        username = preferences.getString("Name","");
                         AlertDialog.Builder doneDialog = new AlertDialog.Builder(PlayActivity.this);
-                        doneDialog.setMessage("Gratulation! Du hast eine Weite von "+distance+" Metern erreicht!");
+                        doneDialog.setMessage("Gratulation "+username+"! Du hast eine Weite von "+distance+" Metern erreicht!");
                         doneDialog.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 SQLiteDatabase highscoreDB = openOrCreateDatabase("HIGHSCORE",MODE_PRIVATE,null);
-                                highscoreDB.execSQL("INSERT INTO HIGHSCORE_DATA VALUES('Max Mustermann',"+ distance+");");
+
+
+                                highscoreDB.execSQL("INSERT INTO HIGHSCORE_DATA VALUES('"+username+"',"+ distance+");");
                                 distance=0;
                                 Intent i = new Intent(PlayActivity.this, HighscoreActivity.class);
                                 startActivity(i);

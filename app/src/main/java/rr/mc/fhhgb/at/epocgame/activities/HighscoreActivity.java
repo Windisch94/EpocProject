@@ -21,7 +21,6 @@ public class HighscoreActivity extends AppCompatActivity {
     ArrayList<Player> myPlayers = new ArrayList<Player>();
     List<String> results = new ArrayList<String>();
     private Cursor cursor = null;
-
     private SQLiteDatabase highscoreDB = null;
 
 
