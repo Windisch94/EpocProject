@@ -23,7 +23,7 @@
             <ImageView
                 android:id="@+id/imageViewEpoc"
                 android:layout_width="match_parent"
-                android:layout_height="500px"
+                android:layout_height="500dp"
                 android:src="@drawable/epoc" />
         </LinearLayout>
 
@@ -61,7 +61,7 @@
                 android:id="@+id/btnApply"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Enter" />
+                android:text="Ok" />
         </LinearLayout>
 
     </LinearLayout>
