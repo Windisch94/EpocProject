@@ -24,7 +24,7 @@
                 android:id="@+id/imageViewEpoc"
                 android:layout_width="match_parent"
                 android:layout_height="500px"
-                android:src="@drawable/epoc" />
+                android:src="@drawable/launcher" />
         </LinearLayout>
 
         <LinearLayout

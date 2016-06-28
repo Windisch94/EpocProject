@@ -25,16 +25,22 @@ import rr.mc.fhhgb.at.epocgame.views.BackgroundView;
 
 public class PlayActivity extends AppCompatActivity {
 
+    public TextView distanceTV;
+    public TextView timeTV;
+    int distance = 0;
     private BackgroundView bgv;
     private ImageView ballImageView;
     private RotateAnimation r;
     private AnimationSet animationSet;
     private TranslateAnimation t;
-    public TextView distanceTV;
-    public TextView timeTV;
     private Button startButton;
     private Button nudgeButton;
-    int distance =0;
+
+    //hintergrund verschieben, buffert ball quasi weg, synchronsationsproblem
+
+    //nochmal mit property animation probieren
+
+    //power meter, mit schnellerem background
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

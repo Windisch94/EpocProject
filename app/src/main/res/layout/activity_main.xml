@@ -16,13 +16,13 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/usernameTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="right"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:id="@+id/usernameTV"
             android:textSize="6pt"
-            android:textStyle="bold"
-            android:layout_gravity="right" />
+            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/epocImage"
@@ -32,7 +32,7 @@
             android:layout_marginBottom="1dp"
             android:layout_marginLeft="1dp"
             android:layout_marginRight="1dp"
-            android:src="@drawable/epoc" />
+            android:src="@drawable/launcher" />
 
         <Button
             android:id="@+id/buttonPlay"
