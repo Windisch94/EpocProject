@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ProgressDialog progressDialog;
     int MY_PERMISSIONS_REQUEST_ACCESSLOCATION;
     AlertDialog.Builder alertNotConnected;
+    AlertDialog alertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,10 +62,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 isEPOC= true;
                 EngineConnector.setContext(MainActivity.this);
                 engineConnector = EngineConnector.shareInstance();
+                progressDialog = ProgressDialog.show(MainActivity.this,"Verbindungsaufbau","EPOC+ Gerät wird verbunden",true);
                 BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
                 if (!bluetoothAdapter.isEnabled()) {
                     bluetoothAdapter.enable();
                 }
+                new CountDownTimer(20000,1000) { // Connection Timeout
+
+                    /**
+                     * Callback fired on regular interval.
+                     *
+                     * @param millisUntilFinished The amount of time until finished.
+                     */
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+
+                    }
+
+                    /**
+                     * Callback fired when the time is up.
+                     */
+                    @Override
+                    public void onFinish() {
+                        isEPOC = false;
+                        progressDialog.dismiss();
+                        alertDialog.show();
+
+                    }
+                }.start();
             }
         });
         alertDialogBuilder.setNegativeButton("Nein", new DialogInterface.OnClickListener() {
@@ -72,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 isEPOC=false;
             }
         });
-        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog = alertDialogBuilder.create();
         alertDialog.show();
         accessPermissions(); //access permissions on runtime for android >6.0
         batteryStatus = (TextView) findViewById(R.id.batteryText);
@@ -86,35 +112,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
 
-       // progressDialog = ProgressDialog.show(this,"Verbindungsaufbau","EPOC+ Gerät wird verbunden",true);
+
         Timer timer = new Timer();
         TimerTask timerTask = new TimerTask() { // TimerTask für die BatteryConnection
             @Override
             public void run() {
-                runOnUiThread(new Runnable() { // Update View in Thread
-                    @Override
-                    public void run() {
-                        if (engineConnector!= null) {
-                            if (engineConnector.isConnected) {
-                                connectionStatus.setTextColor(Color.parseColor("#2E7D32"));
-                                connectionStatus.setText("Verbunden");
-                                connectionStatus.setEnabled(true);
-                                setBatteryStatus(IEmoStateDLL.IS_GetBatteryChargeLevel()[0]);
-                                 progressDialog.dismiss();
+                if (isEPOC) {
+                    runOnUiThread(new Runnable() { // Update View in Thread
+                        @Override
+                        public void run() {
+                            if (engineConnector!= null) {
+                                if (engineConnector.isConnected) {
+                                    connectionStatus.setTextColor(Color.parseColor("#2E7D32"));
+                                    connectionStatus.setText("Verbunden");
+                                    connectionStatus.setEnabled(true);
+                                    setBatteryStatus(IEmoStateDLL.IS_GetBatteryChargeLevel()[0]);
+                                    progressDialog.dismiss();
 
 
-                            } else {
-                                connectionStatus.setTextColor(Color.RED);
-                                connectionStatus.setText("Nicht verbunden");
-                               // connectionStatus.setEnabled(false);
-                                // set state so it doesnt jump in between values
-                                setBatteryStatus(0);
-                                   progressDialog.show();
+                                } else {
+                                    connectionStatus.setTextColor(Color.RED);
+                                    connectionStatus.setText("Nicht verbunden");
+                                    // connectionStatus.setEnabled(false);
+                                    // set state so it doesnt jump in between values
+                                    setBatteryStatus(0);
+                                    progressDialog.show();
 
+                                }
                             }
                         }
-                    }
-                });
+                    });
+                }
+
 
             }
         };
