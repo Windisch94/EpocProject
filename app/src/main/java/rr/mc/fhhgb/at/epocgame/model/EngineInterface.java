@@ -16,6 +16,10 @@ public interface EngineInterface {
 
 	void trainErased();
 
+	public void userAdd(int userId);
+
+	public void userRemoved();
+
 
 	
 	//action

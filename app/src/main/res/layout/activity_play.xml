@@ -3,97 +3,67 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="0dp"
-    android:paddingLeft="0dp"
-    android:paddingRight="0dp"
-    android:paddingTop="0dp"
-    tools:context=".activities.PlayActivity">
+    tools:context="rr.mc.fhhgb.at.epocgame.activities.PlayActivity">
 
-
-
-    <ImageView
-        android:id="@+id/background_one"
-        android:layout_width="match_parent"
+    <rr.mc.fhhgb.at.epocgame.views.BackgroundView
+        android:id="@+id/backgroundView"
         android:layout_height="match_parent"
-        android:src="@drawable/background" />
-
-    <ImageView
-        android:id="@+id/background_two"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/background" />
-
-    <ImageView
-        android:id="@+id/ballImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/buttonMoveBgd"
-        android:layout_marginTop="300dp"
-        android:layout_toStartOf="@+id/buttonMoveBgd"
-        android:src="@drawable/ball"
-        android:visibility="gone" />
+        android:layout_width="match_parent"/>
 
     <Button
-        android:id="@+id/buttonMoveBgd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="55dp"
-        android:text="Move Bgd" />
-
-    <Button
-        android:id="@+id/buttonMoveBall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/buttonMoveBgd"
-        android:layout_toLeftOf="@+id/buttonMoveBgd"
-        android:layout_toStartOf="@+id/buttonMoveBgd"
-        android:text="Move Ball" />
-
-    <Button
-        android:id="@+id/buttonStart"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/buttonMoveBgd"
-        android:layout_toEndOf="@+id/buttonMoveBgd"
-        android:layout_toRightOf="@+id/buttonMoveBgd"
-        android:text="Start" />
-
-    <TextView
-        android:id="@+id/textViewCountdown"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/buttonStart"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/buttonMoveBgd"
-        android:layout_toRightOf="@+id/buttonMoveBgd"
-        android:text="Countdown:"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/textViewDistance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/buttonMoveBall"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/buttonMoveBgd"
-        android:layout_toStartOf="@+id/buttonMoveBgd"
-        android:text="Distance:"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textStyle="bold" />
-
-    <rr.mc.fhhgb.at.epocgame.AnimatedView
-        android:id="@+id/animated_view"
-        android:layout_width="fill_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/buttonMoveBgd"
+        android:text="Start"
+        android:id="@+id/startButton"
+        android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:paddingBottom="30dp"
+        android:id="@+id/linearLayout">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/playBallImage"
+            android:background="@drawable/ball_practise"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            />
+    </LinearLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Schneller"
+        android:id="@+id/nudgeButton"
+        android:layout_above="@+id/startButton"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/distanceTV"
+        android:text="Distanz: 0m"
+        android:layout_alignParentLeft="true"
+        android:textSize="25sp"
+        android:layout_alignParentStart="true"
+        android:textStyle="bold"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/timeTV"
+        android:text="Zeit: 20 sek."
+        android:layout_alignParentRight="true"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp"/>
+
 
 </RelativeLayout>

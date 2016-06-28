@@ -6,6 +6,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -27,9 +28,8 @@ import java.util.TimerTask;
 
 import rr.mc.fhhgb.at.epocgame.R;
 import rr.mc.fhhgb.at.epocgame.model.EngineConnector;
-import rr.mc.fhhgb.at.epocgame.model.EngineInterface;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, EngineInterface {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "brain2machine";
     static boolean isEPOC = false;
@@ -37,16 +37,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     EngineConnector engineConnector;
     TextView batteryStatus;
     TextView connectionStatus;
-    TextView username;
     ProgressDialog progressDialog;
     int MY_PERMISSIONS_REQUEST_ACCESSLOCATION;
     AlertDialog.Builder alertNotConnected;
-    //SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        createDatabase();
         //Alert for no Connection
         alertNotConnected = new AlertDialog.Builder(this);
         alertNotConnected.setMessage("Du bist nicht mit einem EPOC+ Gerät verbunden, trotzdem fortfahren?");
@@ -61,7 +60,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 isEPOC= true;
                 EngineConnector.setContext(MainActivity.this);
                 engineConnector = EngineConnector.shareInstance();
-                EngineConnector.delegate = MainActivity.this;
                 BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
                 if (!bluetoothAdapter.isEnabled()) {
                     bluetoothAdapter.enable();
@@ -79,11 +77,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         accessPermissions(); //access permissions on runtime for android >6.0
         batteryStatus = (TextView) findViewById(R.id.batteryText);
         connectionStatus = (TextView) findViewById(R.id.signalText);
-        username = (TextView) findViewById(R.id.textViewName);
-
-        // Wenn hier versucht wird Name ins textfield zu schreiben, Textfeld im .xml zurzeit entfernt
-
-        //username.setText(preferences.getString("Name", ""));
         connectionStatus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 connectionStatus.setText("Verbunden");
                                 connectionStatus.setEnabled(true);
                                 setBatteryStatus(IEmoStateDLL.IS_GetBatteryChargeLevel()[0]);
-                                // progressDialog.dismiss();
+                                 progressDialog.dismiss();
 
 
                             } else {
@@ -116,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                // connectionStatus.setEnabled(false);
                                 // set state so it doesnt jump in between values
                                 setBatteryStatus(0);
-                                //   progressDialog.show();
+                                   progressDialog.show();
 
                             }
                         }
@@ -137,6 +130,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         button.setOnClickListener(this);
         button = (Button) findViewById(R.id.buttonHighscore);
         button.setOnClickListener(this);
+    }
+
+    /**
+     * creates the highscore database if not exists
+     */
+    private void createDatabase() {
+        SQLiteDatabase highscoreDB = openOrCreateDatabase("HIGHSCORE",MODE_PRIVATE,null);
+        highscoreDB.execSQL("CREATE TABLE IF NOT EXISTS HIGHSCORE_DATA (USERNAME VARCHAR, SCORE INT);");
     }
 
 
@@ -181,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         alertNotConnected.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Intent i = new Intent(MainActivity.this, TestPlayActivity.class);
+                                Intent i = new Intent(MainActivity.this, PlayActivity.class);
                                 startActivity(i);
                             }
                         });
@@ -189,7 +190,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         AlertDialog alertDialog = alertNotConnected.create();
                         alertDialog.show();
                     }else {
-                        Intent i = new Intent(MainActivity.this, TestPlayActivity.class);
+                        Intent i = new Intent(MainActivity.this, PlayActivity.class);
                         startActivity(i);
                     }
 
@@ -229,7 +230,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.buttonHowto: {
                 Log.i(TAG, "Button howto pressed");
-                Intent i = new Intent(this, TestPlayActivity.class);
+                Intent i = new Intent(this, PlayActivity.class);
                 startActivity(i);
             }
             break;
@@ -270,49 +271,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public void isConnected() {
-
-    }
-    @Override
-    public void trainStarted() {
-
-    }
-
-    @Override
-    public void trainSucceed() {
-
-    }
-
-    @Override
-    public void trainFailed() {
-
-    }
-
-    @Override
-    public void trainCompleted() {
-
-    }
-
-    @Override
-    public void trainRejected() {
-
-    }
-
-    @Override
-    public void trainReset() {
-
-    }
-
-    @Override
-    public void trainErased() {
-
-    }
 
 
-    @Override
-    public void currentAction(int typeAction, float power) {
-
-    }
 
     private void accessPermissions() {
         // Request & set Permissions

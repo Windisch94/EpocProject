@@ -17,11 +17,16 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.emotiv.insight.IEmoStateDLL;
+
 import rr.mc.fhhgb.at.epocgame.R;
+import rr.mc.fhhgb.at.epocgame.model.EngineConnector;
+import rr.mc.fhhgb.at.epocgame.model.EngineInterface;
 
-public class PractiseActivity extends AppCompatActivity {
+public class PractiseActivity extends AppCompatActivity implements EngineInterface {
 
 
+    private EngineConnector engineConnector;
     private RadioGroup radioTypeGroup;
     private RadioButton radioTypeButton;
     private ProgressBar progressBarTraining;
@@ -35,13 +40,20 @@ public class PractiseActivity extends AppCompatActivity {
     private AnimationSet animationSet;
     private RotateAnimation r;
     private TranslateAnimation t;
+    boolean isTraining = false;
+    int userId = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_practise);
         ballImage = (ImageView) findViewById(R.id.ballPractise);
-        //initRotateAndTranslateAnimation();
+
+        if (MainActivity.isEPOC) {
+            engineConnector = EngineConnector.shareInstance();
+            engineConnector.delegate = this;
+
+        }
 
 
         btn_train = (Button) findViewById(R.id.button_training);
@@ -54,25 +66,50 @@ public class PractiseActivity extends AppCompatActivity {
                 if (btn_train.getText().equals("Abbrechen")) {
                     enableUIElements();
                     ballImage.clearAnimation();
-                   // av.reset();
+
                     progressBarTraining.setProgress(0);
                     isBackAllowed = true;
 
                 }else {
-                    radioTypeButton = (RadioButton) findViewById(radioTypeGroup.getCheckedRadioButtonId());
-                    progressBarStatus = 0;
-                    disableUIElements();
-                    if (radioTypeButton.getText().equals("Neutral")) {
-                        initRotateAnimation();
-                    } else if (radioTypeButton.getText().equals("Anstoßen")) {
-                        initRotateAndTranslateAnimation();
+                    if (MainActivity.isEPOC) {
+                        if (!engineConnector.isConnected) {
+                            Toast.makeText(PractiseActivity.this, "Du bist nicht mit dem Headset verbunden", Toast.LENGTH_SHORT).show();
+                        } else {
+                            radioTypeButton = (RadioButton) findViewById(radioTypeGroup.getCheckedRadioButtonId());
+                            progressBarStatus = 0;
+                            disableUIElements();
+                            if (radioTypeButton.getText().equals("Neutral")) {
+                                initRotateAnimation();
+                                startTraining(IEmoStateDLL.IEE_MentalCommandAction_t.MC_NEUTRAL);
+                            } else if (radioTypeButton.getText().equals("Anstoßen")) {
+                                initRotateAndTranslateAnimation();
+                                engineConnector.enableMentalcommandActions(IEmoStateDLL.IEE_MentalCommandAction_t.MC_PUSH);
+                                startTraining(IEmoStateDLL.IEE_MentalCommandAction_t.MC_PUSH);
 
-                    }
-                    ballImage.startAnimation(animationSet);
-                    thread = new Thread(new Runnable() {
+                            }
 
-                        @Override
-                        public void run() {
+
+
+                        }
+                    }else {
+                        radioTypeButton = (RadioButton) findViewById(radioTypeGroup.getCheckedRadioButtonId());
+                        progressBarStatus = 0;
+                        disableUIElements();
+                        if (radioTypeButton.getText().equals("Neutral")) {
+                            initRotateAnimation();
+                           // startTraining(IEmoStateDLL.IEE_MentalCommandAction_t.MC_NEUTRAL);
+                        } else if (radioTypeButton.getText().equals("Anstoßen")) {
+                            initRotateAndTranslateAnimation();
+                           // engineConnector.enableMentalcommandActions(IEmoStateDLL.IEE_MentalCommandAction_t.MC_PUSH);
+                           // startTraining(IEmoStateDLL.IEE_MentalCommandAction_t.MC_PUSH);
+
+                        }
+
+                        ballImage.startAnimation(animationSet);
+                        thread = new Thread(new Runnable() {
+
+                            @Override
+                            public void run() {
 
                                 while (progressBarStatus < 100 && !isBackAllowed) {
                                     progressBarStatus += 6;
@@ -99,16 +136,18 @@ public class PractiseActivity extends AppCompatActivity {
                                             }
                                         }
                                     };
-                                    if(!isBackAllowed) {
+                                    if (!isBackAllowed) {
                                         progressBarHandler.post(progressBarRunnable);
                                     }
 
                                 }
 
 
-                        }
-                    });
-                    thread.start();
+                            }
+                        });
+                        thread.start();
+                    }
+
                 }
 
 
@@ -117,6 +156,11 @@ public class PractiseActivity extends AppCompatActivity {
             }
         });
 
+
+    }
+
+    private void startTraining(IEmoStateDLL.IEE_MentalCommandAction_t mcNeutral) {
+        isTraining = engineConnector.startTrainingMetalcommand(isTraining,mcNeutral);
 
     }
 
@@ -157,7 +201,7 @@ public class PractiseActivity extends AppCompatActivity {
 
         t = new TranslateAnimation(0,width - right-30,0,0); // 30 padding
 
-        t.setDuration(2000);
+        t.setDuration(3000);
         t.setRepeatMode(Animation.REVERSE);
         t.setRepeatCount(Animation.INFINITE);
         animationSet = new AnimationSet(false);
@@ -181,6 +225,56 @@ public class PractiseActivity extends AppCompatActivity {
         if (isBackAllowed) {
             super.onBackPressed();
         }
+
+    }
+
+    @Override
+    public void trainStarted() {
+
+    }
+
+    @Override
+    public void trainSucceed() {
+
+    }
+
+    @Override
+    public void trainFailed() {
+
+    }
+
+    @Override
+    public void trainCompleted() {
+
+    }
+
+    @Override
+    public void trainRejected() {
+
+    }
+
+    @Override
+    public void trainReset() {
+
+    }
+
+    @Override
+    public void trainErased() {
+
+    }
+
+    @Override
+    public void userAdd(int userId) {
+        this.userId = userId;
+    }
+
+    @Override
+    public void userRemoved() {
+
+    }
+
+    @Override
+    public void currentAction(int typeAction, float power) {
 
     }
 }

@@ -1,308 +1,169 @@
 package rr.mc.fhhgb.at.epocgame.activities;
 
-import android.animation.ValueAnimator;
-import android.graphics.Bitmap;
-import android.graphics.Point;
-import android.graphics.drawable.BitmapDrawable;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
-import android.os.Message;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
-import android.view.Display;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
 import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.emotiv.insight.IEmoStateDLL;
-
-import java.util.Timer;
-import java.util.TimerTask;
-
-import rr.mc.fhhgb.at.epocgame.model.EngineConnector;
-import rr.mc.fhhgb.at.epocgame.model.EngineInterface;
 import rr.mc.fhhgb.at.epocgame.R;
-import rr.mc.fhhgb.at.epocgame.views.EpocQualityView;
+import rr.mc.fhhgb.at.epocgame.views.BackgroundView;
 
-public class PlayActivity extends AppCompatActivity implements EngineInterface {
+public class PlayActivity extends AppCompatActivity {
 
-    Button buttonMoveBgd;
-    Button buttonMoveBall;
-    Button buttonStart;
-    ValueAnimator animator;
-    long duration = 10000L;
-    int height;
-    int width;
-    ImageView backgroundOne;
-    ImageView backgroundTwo;
-    TextView textViewCountdown;
-    TextView textViewDistance;
-    boolean fast = false;
-    long distance;
-    long startTime;
-    long elapsedTime;
-
-    //nächster versuch
-    ImageView imgBox;
-    float power;
-    float _currentPower = 5;
-    boolean isTrainning = false;
-    int _currentAction = IEmoStateDLL.IEE_MentalCommandAction_t.MC_RIGHT.ToInt();
-    float startLeft = -1;
-    float startRight = 0;
-    float widthScreen = 0;
-    EngineConnector engineConnector;
-    int count = 0;
-    Timer timer;
-    TimerTask timerTask;
-    Handler handlerUpdateUI = new Handler() {
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case 0:
-                    /*count ++;
-                    int trainningTime=(int) MentalCommandDetection.IEE_MentalCommandGetTrainingTime(userId)[1]/1000;
-                    if(trainningTime > 0)
-                        progressBarTime.setProgress(count / trainningTime);
-                    if (progressBarTime.getProgress() >= 100) {
-                        timerTask.cancel();
-                        timer.cancel();
-                    }*/
-                    break;
-                case 1:
-                    moveImage();
-                    break;
-                default:
-                    //moveImage sonst nicht hier
-                    moveImage();
-                    break;
-            }
-        }
-    };
-
+    private BackgroundView bgv;
+    private ImageView ballImageView;
+    private RotateAnimation r;
+    private AnimationSet animationSet;
+    private TranslateAnimation t;
+    public TextView distanceTV;
+    public TextView timeTV;
+    private Button startButton;
+    private Button nudgeButton;
+    int distance =0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
-
-        textViewCountdown = (TextView) findViewById(R.id.textViewCountdown);
-        textViewDistance = (TextView) findViewById(R.id.textViewDistance);
-
-        buttonMoveBgd = (Button) findViewById(R.id.buttonMoveBgd);
-        buttonMoveBall = (Button) findViewById(R.id.buttonMoveBall);
-        buttonStart = (Button) findViewById(R.id.buttonStart);
-
-        //ab hier
-        if(MainActivity.isEPOC) {
-            engineConnector = EngineConnector.shareInstance();
-            EngineConnector.delegate = this;
-        }
-
-        //init();
-        imgBox = (ImageView) findViewById(R.id.ballImage);
-
-
-        buttonStart.setOnClickListener(new View.OnClickListener() {
+        bgv = (BackgroundView)findViewById(R.id.backgroundView);
+        distanceTV = (TextView) findViewById(R.id.distanceTV);
+        timeTV = (TextView) findViewById(R.id.timeTV);
+        startButton = (Button) findViewById(R.id.startButton);
+        startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //start timer and game
-                animator.start();
-                startTime = System.currentTimeMillis();
 
+                    bgv.getBackgroundModel().setSpeed(5);
+                    initRotateAnimation();
+                    ballImageView.startAnimation(animationSet);
+                    startButton.setAlpha(0);
+                    startButton.setEnabled(false);
                 new CountDownTimer(20000, 1000) {
 
                     public void onTick(long millisUntilFinished) {
 
 
-                        textViewCountdown.setText("Remaining: " + millisUntilFinished / 1000 + "sec");
-                        distance = (System.currentTimeMillis() - startTime);
-                        //plus move ball factor
-                        textViewDistance.setText("Distance: " + (distance / 1000) + "m");
+                        timeTV.setText("Zeit: " + millisUntilFinished / 1000 + "sek.");
+
 
                     }
 
                     public void onFinish() {
-                        textViewCountdown.setText("end!");
-                        animator.end();
+                        timeTV.setText("Zeit: 20 sek.");
+                        bgv.getBackgroundModel().setSpeed(0);
+                        distance = bgv.getBackgroundModel().distance;
+                        ballImageView.clearAnimation();
+                        startButton.setAlpha(1);
+                        startButton.setEnabled(true);
+                        AlertDialog.Builder doneDialog = new AlertDialog.Builder(PlayActivity.this);
+                        doneDialog.setMessage("Gratulation! Du hast eine Weite von "+distance+" Metern erreicht!");
+                        doneDialog.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                SQLiteDatabase highscoreDB = openOrCreateDatabase("HIGHSCORE",MODE_PRIVATE,null);
+                                highscoreDB.execSQL("INSERT INTO HIGHSCORE_DATA VALUES('Max Mustermann',"+ distance+");");
+                                distance=0;
+                                Intent i = new Intent(PlayActivity.this, HighscoreActivity.class);
+                                startActivity(i);
+                            }
+                        });
+                        bgv.getBackgroundModel().distance = 0;
+                        AlertDialog alertDialog = doneDialog.create();
+                        alertDialog.show();
+
+
+
 
                     }
                 }.start();
 
             }
         });
-
-        buttonMoveBall.setOnClickListener(new View.OnClickListener() {
+        nudgeButton = (Button)findViewById(R.id.nudgeButton);
+        nudgeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Move Ball
-                moveImage();
-            }
-        });
+                bgv.getBackgroundModel().speedUp();
+                initRotateAndTranslateAnimation();
+                ballImageView.startAnimation(animationSet);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //r.setDuration(500);
+                        /*try {
+                            *//*Thread.sleep(1000);
+                            r.setDuration(700);
+                            Thread.sleep(1000);
+                            r.setDuration(900);
+                            Thread.sleep(1000);
+                            r.setDuration(1100);
+                            Thread.sleep(1000);
+                            r.setDuration(1300);
+                            Thread.sleep(1000);
+                            r.setDuration(1500);*//*
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }*/
 
-
-        buttonMoveBgd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //background animation wird schneller
-
-                if (fast == false) {
-                    animator.setDuration(duration / 3);
-                    fast = true;
-                    buttonMoveBgd.setText("slower");
-
-                } else {
-                    animator.setDuration(duration * 3);
-                    fast = false;
-                    buttonMoveBgd.setText("faster");
-                }
-
-            }
-        });
-        backgroundOne = (ImageView) findViewById(R.id.background_one);
-        backgroundTwo = (ImageView) findViewById(R.id.background_two);
-        DisplayMetrics dm = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
-
-
-        Bitmap bm = ((BitmapDrawable) backgroundOne.getDrawable()).getBitmap();
-        bm = EpocQualityView.getResizedBitmap(bm, dm.heightPixels + 200, dm.widthPixels + 200);
-        Bitmap bm2 = ((BitmapDrawable) backgroundTwo.getDrawable()).getBitmap();
-        bm2 = EpocQualityView.getResizedBitmap(bm2, dm.heightPixels + 200, dm.widthPixels + 200);
-
-
-        backgroundOne.setImageBitmap(bm);
-        backgroundTwo.setImageBitmap(bm2);
-
-        animator = ValueAnimator.ofFloat(0.0f, 1.0f);
-        animator.setRepeatCount(ValueAnimator.INFINITE);
-        animator.setInterpolator(new LinearInterpolator());
-        animator.setDuration(duration);
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                final float progress = (float) animation.getAnimatedValue();
-                final float width = backgroundOne.getWidth();
-                final float translationX = width * progress * -1;
-                backgroundOne.setTranslationX(translationX);
-                backgroundTwo.setTranslationX(translationX + width);
+                    }
+                }).start();
 
             }
         });
+        initRotateAnimation();
+        ballImageView = (ImageView) findViewById(R.id.playBallImage);
+
+
 
     }
+    protected void onResume() {
+        super.onResume();
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-    private void init() {
-        startTrainingMentalcommand(IEmoStateDLL.IEE_MentalCommandAction_t.MC_RIGHT);
-        Timer timerListenAction = new Timer();
-        timerListenAction.scheduleAtFixedRate(new TimerTask() {
-                                                  @Override
-                                                  public void run() {
-                                                      handlerUpdateUI.sendEmptyMessage(1);
-                                                  }
-                                              },
-                0, 20);
-
-    }
-
-    public void startTrainingMentalcommand(IEmoStateDLL.IEE_MentalCommandAction_t MentalCommandAction) {
-        isTrainning = engineConnector.startTrainingMetalcommand(isTrainning, MentalCommandAction);
-        //btnTrain.setText((isTrainning) ? "Abort Trainning" : "Train");
-    }
-
-    private void moveImage() {
-        power = _currentPower;
-        if (isTrainning) {
-            imgBox.setLeft((int) (startLeft));
-            imgBox.setRight((int) startRight);
-            imgBox.setScaleX(1.0f);
-            imgBox.setScaleY(1.0f);
-        }
-        if ((_currentAction == IEmoStateDLL.IEE_MentalCommandAction_t.MC_LEFT.ToInt()) || (_currentAction == IEmoStateDLL.IEE_MentalCommandAction_t.MC_RIGHT.ToInt()) && power > 0) {
-
-            if (imgBox.getScaleX() == 1.0f && startLeft > 0) {
-                imgBox.setRight((int) widthScreen);
-                power = (_currentAction == IEmoStateDLL.IEE_MentalCommandAction_t.MC_LEFT.ToInt()) ? power * 3 : power * -3;
-                imgBox.setLeft((int) (power > 0 ? Math.max(0, (int) (imgBox.getLeft() - power)) : Math.min(widthScreen - imgBox.getMeasuredWidth(), (int) (imgBox.getLeft() - power))));
-            }
-        } else if (imgBox.getLeft() != startLeft && startLeft > 0) {
-            power = (imgBox.getLeft() > startLeft) ? 6 : -6;
-            imgBox.setLeft(power > 0 ? Math.max((int) startLeft, (int) (imgBox.getLeft() - power)) : Math.min((int) startLeft, (int) (imgBox.getLeft() - power)));
-        }
-        if (imgBox.getScaleX() != 1.0f) {
-            power = (imgBox.getScaleX() < 1.0f) ? 0.03f : -0.03f;
-            imgBox.setScaleX(power > 0 ? Math.min(1, (imgBox.getScaleX() + power)) : Math.max(1, (imgBox.getScaleX() + power)));
-            imgBox.setScaleY(power > 0 ? Math.min(1, (imgBox.getScaleY() + power)) : Math.max(1, (imgBox.getScaleY() + power)));
-        }
-    }
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        Display display = getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        widthScreen = size.x;
-        startLeft = imgBox.getLeft();
-        startRight = imgBox.getRight();
-    }
-
-
-    public void TimerTask() {
-        count = 0;
-        timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                // TODO Auto-generated method stub
-                handlerUpdateUI.sendEmptyMessage(0);
-            }
-        };
+        bgv.resume();
     }
 
     @Override
-    public void trainStarted() {
-        // TODO Auto-generated method stub
-        //progressBarTime.setVisibility(View.VISIBLE);
-        //btnClear.setClickable(false);
-        // spinAction.setClickable(false);
-        timer = new Timer();
-        TimerTask();
-        timer.schedule(timerTask, 0, 20);
+    protected void onPause() {
+        super.onPause();
+
+        bgv.pause();
     }
+    public void initRotateAnimation() {
+        r = new RotateAnimation(0,359, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        r.setInterpolator(new LinearInterpolator());
+        r.setRepeatCount(Animation.INFINITE);
+        r.setRepeatMode(Animation.RESTART);
+        r.setDuration(1500);
 
-    @Override
-    public void trainSucceed() {
 
-    }
-
-    @Override
-    public void trainFailed() {
-
-    }
-
-    @Override
-    public void trainCompleted() {
+        animationSet = new AnimationSet(false);
+        animationSet.addAnimation(r);
 
     }
 
-    @Override
-    public void trainRejected() {
+    public void initRotateAndTranslateAnimation() {
+        DisplayMetrics metrics = this.getResources().getDisplayMetrics();
+        t = new TranslateAnimation(0,metrics.widthPixels/2,0,0); // 30 padding
 
+        t.setDuration(2500);
+        t.setRepeatMode(Animation.REVERSE);
+
+        animationSet = new AnimationSet(false);
+        animationSet.addAnimation(r);
+        animationSet.addAnimation(t);
     }
-
-    @Override
-    public void trainReset() {
-
-    }
-
-    @Override
-    public void trainErased() {
-
-    }
-
-    @Override
-    public void currentAction(int typeAction, float power) {
-
-    }
-
-
 }

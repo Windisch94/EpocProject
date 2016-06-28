@@ -11,14 +11,14 @@ import android.view.SurfaceView;
 import android.widget.TextView;
 
 import rr.mc.fhhgb.at.epocgame.R;
-import rr.mc.fhhgb.at.epocgame.activities.TestPlayActivity;
+import rr.mc.fhhgb.at.epocgame.activities.PlayActivity;
 import rr.mc.fhhgb.at.epocgame.model.Background;
 
 
 public class BackgroundView extends SurfaceView implements Runnable {
 
     Background bg;
-    private TestPlayActivity context;
+    private PlayActivity context;
     Thread renderThread;
     SurfaceHolder holder;
     volatile boolean running;
@@ -38,7 +38,7 @@ public class BackgroundView extends SurfaceView implements Runnable {
 
     private void init(Context context) {
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-        this.context = (TestPlayActivity)context;
+        this.context = (PlayActivity)context;
         Bitmap background = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.back),metrics.widthPixels,metrics.heightPixels,false);
         this.bg = new Background(background);
         this.holder = getHolder();
