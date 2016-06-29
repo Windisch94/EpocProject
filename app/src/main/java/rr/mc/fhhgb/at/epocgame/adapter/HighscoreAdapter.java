@@ -88,18 +88,22 @@ public class HighscoreAdapter extends BaseAdapter {
             holder = new ViewHolder();
             holder.username = (TextView) convertView.findViewById(R.id.username);
             holder.score = (TextView) convertView.findViewById(R.id.score);
+            holder.rank = (TextView) convertView.findViewById(R.id.rank);
             convertView.setTag(holder);
         }else {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.score.setText(players.get(position).getScore());
+        holder.score.setText(players.get(position).getScore()+"m");
         holder.username.setText(players.get(position).getName());
+        holder.rank.setText(position+1+".");
+
         return convertView;
     }
 
     private class ViewHolder {
         TextView username;
         TextView score;
+        TextView rank;
     }
 }

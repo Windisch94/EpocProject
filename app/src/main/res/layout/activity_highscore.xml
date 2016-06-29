@@ -9,7 +9,7 @@
     android:id="@+id/highscoreView">
 
     <ImageView
-        android:id="@+id/imgPlaylistItemBg"
+        android:id="@+id/backgroundImage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:adjustViewBounds="true"
@@ -17,19 +17,19 @@
         android:scaleType="fitXY"
         android:src="@drawable/back" />
 
-    <ScrollView
-        android:id="@+id/scrollViewHighscore"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
 
     <ListView
         android:id="@+id/highscoreList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingLeft="5dp"
         android:scrollingCache="true"
-        android:layout_below="@+id/textView3"
+        android:layout_below="@+id/titleLayout"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="10.0sp"/>/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -37,26 +37,38 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Highscore"
         android:id="@+id/textView"
+        android:paddingTop="10dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Name"
-        android:id="@+id/textView3"
-        android:layout_below="@+id/textView"
-        android:layout_toLeftOf="@+id/textView"
-        android:layout_toStartOf="@+id/textView" />
+        android:orientation="horizontal"
+        android:layout_below="@id/textView"
+        android:paddingTop="10dp"
+        android:id="@+id/titleLayout"
+        android:weightSum="2">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Name"
+            android:layout_weight="1"
+            android:id="@+id/textView3"
+            android:textStyle="bold"
+            android:textSize="9pt"
+            android:textAlignment="center"
+             />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Weite"
-        android:id="@+id/textView4"
-        android:layout_below="@+id/textView"
-        android:layout_toRightOf="@+id/textView"
-        android:layout_toEndOf="@+id/textView" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Weite"
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            android:textSize="9pt"
+            android:id="@+id/textView4"
+            />
+    </LinearLayout>
+
 </RelativeLayout>

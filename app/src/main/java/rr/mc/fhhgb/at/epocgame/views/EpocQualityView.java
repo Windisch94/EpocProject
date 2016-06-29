@@ -7,7 +7,6 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.os.Handler;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 
 import com.emotiv.insight.IEmoStateDLL;
@@ -26,17 +25,8 @@ public class EpocQualityView extends View {
         @Override
         public void run() {
             qualityValues = IEmoStateDLL.IS_GetContactQualityFromAllChannels();//<-- DE METHODE!
-            /*for(int i=0;i<qualityValues.length;i++) {
-                Random r = new Random();
-                qualityValues[i] = r.nextInt(5)+1;
-            }*/
-            invalidate();
 
-            String s = "";
-            for (int i=0;i<qualityValues.length;i++) {
-                s += qualityValues[i]+", ";
-            }
-            Log.d("bla",s);
+            invalidate();
         }
     };
     Handler h;

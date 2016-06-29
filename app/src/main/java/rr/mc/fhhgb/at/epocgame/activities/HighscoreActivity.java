@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -49,13 +48,13 @@ public class HighscoreActivity extends AppCompatActivity {
 
         ListView lv = (ListView) findViewById(R.id.highscoreList);
         HighscoreAdapter highScoreAdapter = new HighscoreAdapter(this,myPlayers);
-        //lv.setAdapter(highScoreAdapter);
-        lv.setAdapter(new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,results));
+        lv.setAdapter(highScoreAdapter);
+       // lv.setAdapter(new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,results));
 
     }
 
     private void lookUpData() {
-        cursor = highscoreDB.rawQuery("SELECT USERNAME, SCORE FROM HIGHSCORE_DATA ORDER BY SCORE DESC",null);
+        cursor = highscoreDB.rawQuery("SELECT USERNAME, SCORE FROM HIGHSCORE_DATA ORDER BY SCORE DESC LIMIT 10",null);
         if (cursor != null) {
             if (cursor.moveToFirst()) {
                 do {
