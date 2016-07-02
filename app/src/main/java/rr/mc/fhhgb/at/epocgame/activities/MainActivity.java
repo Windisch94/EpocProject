@@ -15,9 +15,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -43,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     int MY_PERMISSIONS_REQUEST_ACCESSLOCATION;
     AlertDialog.Builder alertNotConnected;
     AlertDialog alertDialog;
+    private boolean isStartedQuality = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,6 +111,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     });
                                     setBatteryStatus(IEmoStateDLL.IS_GetBatteryChargeLevel()[0]);
                                     progressDialog.dismiss();
+                                    if (!isStartedQuality) {
+                                        Intent i = new Intent(MainActivity.this,ConnectionActivity.class);
+                                        startActivity(i);
+                                        isStartedQuality = true;
+                                    }
+
+
 
 
                                 } else {
@@ -144,6 +149,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         button.setOnClickListener(this);
         button = (Button) findViewById(R.id.buttonHighscore);
         button.setOnClickListener(this);
+
+
     }
 
     /**
@@ -261,29 +268,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.settings, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
 
-            case R.id.action_favorite:
-                Intent i = new Intent(this, SettingsActivity.class);
-                startActivity(i);
-                return true;
 
-            default:
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
-                return super.onOptionsItemSelected(item);
-
-        }
-    }
 
 
 
