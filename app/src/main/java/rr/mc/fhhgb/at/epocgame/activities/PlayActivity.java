@@ -28,16 +28,15 @@ import rr.mc.fhhgb.at.epocgame.views.BackgroundView;
 
 public class PlayActivity extends AppCompatActivity {
 
+    public TextView distanceTV;
+    public TextView timeTV;
+    int progressValue = 0;
+    int distance = 0;
     private Handler updatePowerProgressHandler = new Handler();
     private Runnable increasePowerProgressRunnable;
     private Runnable decreasePowerProgressRunnable;
     private boolean increase = false;
     private boolean shouldRun = true;
-
-    public TextView distanceTV;
-    public TextView timeTV;
-    int progressValue = 0;
-    int distance = 0;
     private BackgroundView bgv;
     private ImageView ballImageView;
     private RotateAnimation r;
@@ -47,9 +46,7 @@ public class PlayActivity extends AppCompatActivity {
     private Button startButton;
     private Button nudgeButton;
 
-    //hintergrund verschieben, buffert ball quasi weg, synchronsationsproblem
 
-    //nochmal mit property animation probieren
 
     //power meter, mit schnellerem background
     @Override

@@ -61,7 +61,7 @@ public class HighscoreActivity extends AppCompatActivity {
                     String username = cursor.getString(cursor.getColumnIndex("USERNAME"));
                     int score = cursor.getInt(cursor.getColumnIndex("SCORE"));
                     myPlayers.add(new Player(username,score));
-                    results.add(username+": "+score+"m");
+                    results.add("  " + username+":                        " +score+ "m");
                 }while(cursor.moveToNext());
             }
             cursor.close();

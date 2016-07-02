@@ -48,6 +48,65 @@
         <item>-1</item>
     </string-array>
 
+
+    <string name="howto_text">Allgemeine Infos:
+\n
+\nSCHRITT 1:
+\nBevor Sie das Emotiv Headset anziehen, versichern Sie sich das alle 16 Kontakte mit einer Flüssigkeit versehen wurden.
+Befeuchten Sie gegebenenfalls die Pads neu.
+\n
+\nSCHRITT 2:
+\nSchalten Sie das Emotiv Headset ein und kontrollieren Sie ob der Akku geladen ist (ersichtlich im Menü sobald verbunden). Falls es geladen werden muss verwenden Sie das mitgelieferte Zubehör dazu.
+Laden Sie das Headset für mindestens 15min bevor Sie es noch einmal versuchen.
+\n
+\nSCHRITT 3:
+\nVersichern Sie sich das die Verbindung "gut" ist, verringern Sie sonst die Distanz zwischen Headset und Device.
+Entfernen Sie alle metallischen Gegenstände in der Nähe des Headsets und halten Sie Abstand zu elektromagnetischen Interferenzen und starken Stromquellen, z.B Mikrowellen oder Radio Transmitter.
+\n
+\nSCHRITT 4:
+\nZiehen Sie das Emotiv Headset vorsichtig über den Kopf.
+Ziehen Sie das Headset dann langsam nach vorne, bis sich die Referenz-Pads direkt über Ihrem Ohr befinden und so nah an ihrer Haarlinie wie möglich sind. Adjustieren Sie das Headset des weiteren so, dass sich die rechteckigen Fächer bequem überhalb und hinter Ihren Ohren befinden. Neigen Sie das Headset, damit die zwei niedrigsten, vordersten Sensoren symmetrisch auf ihrer Stirn liegen.
+Überprüfen Sie anschließend ob alle Kontakte ihre Kopfhaut berühren.
+Bewegen Sie das Headset vorsichtig bis es gut sitzt.
+\n
+\nSCHRITT 5:
+\nDie Signalqualitäts View zeigt Ihnen die einzelnen Pads und deren Status. Die Qualitätsstufen haben verschiedene Farben:
+\nSchwarz	\t	Kein Signal
+\nRot		\t	Sehr schwaches Signal
+\nGelb 	\t	Signal OK
+\nGrün 	\t	Gutes Signal
+\n
+\nSCHRITT 6:
+\nStarten Sie mit den 2 Referenzsensoren direkt über ihrem Ohr.
+Wenn schwarz: Überprüfen Sie ob der Filz des Sensor richtig sitzt.
+Gelb bzw.  Rot: Überprüfen Sie, dass das Pad einen komfortablen, aber druckvollen Kontakt mit Ihrer Kopfhaut hat. Befeuchten Sie die Pads gegebenenfalls.
+Wenn die Farben heller werden, verbessert sich das das Signal.
+Versuchen Sie zudem ihr Haar an dieser Stelle zu entfernen damit die Elektrode besseren Kontakt mit ihrer Kopfhaut hat.
+\n
+\nSCHRITT 7:
+Wiederholen Sie Schritt 6 für jede Elektrode, bis die Indikatoren grün sind. Normalerweise toleriert das System wenn ein Paar Sensoren lediglich gelb sind.
+</string>
+    <string name="howto_text2">Anleitung Spiel:
+\n
+\nSCHRITT 1:
+\nStarten Sie die Trainingsaktivität, in dem Sie den "TRAINIEREN"-Button drücken. Wählen Sie zwischen "neutral" und "anstoßen" und konzentrieren Sie sich auf die gewählte Aktion bis die Progressbar voll ist.
+\nNeutral\t 	Versuchen Sie einfach an nichts zu denken
+\nAnstoßen\t 	Konzentrieren Sie sich darauf den Ball von Links nach Rechts zu stoßen
+\nAbsolvieren Sie beide Aktionen erfolgreich, ersichtlich an der grünen Färbung der jeweiligen Aktion.
+\n
+\nSCHRITT 2:
+\nStarten Sie das Spielaktivität mit dem "SPIELEN"-Button.
+Sobald Sie bereit sind können Sie das Spiel mit dem "START"-Button beginnen.
+\n
+\nSCHRITT 3:
+\nKonzentrieren Sie sich nur für 20sek. darauf den Ball zu bewegen, denken Sie dabei gleich wie beim Training. Die Powerbar signalisiert Ihnen wie stark Ihr Signal gerade ist.
+\n
+\nSCHRITT 4:
+\nSobald der Timer abgelaufen ist, sehen Sie Ihre erreichte Punktezahl.
+Diese können Sie auch jederzeit unter "HIGHSCORE" anschauen.
+\n
+\nSCHRITT 5:
+\nWenn Sie ein neues Spiel beginnen wollen wiederholen sie SCHRITT 1</string>
     <string name="pref_title_system_sync_settings">System sync settings</string>
 
     <!-- Example settings for Notifications -->

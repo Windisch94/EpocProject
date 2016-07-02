@@ -251,7 +251,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.buttonHowto: {
                 Log.i(TAG, "Button howto pressed");
-                Intent i = new Intent(this, PlayActivity.class);
+                Intent i = new Intent(this, HowtoActivity.class);
                 startActivity(i);
             }
             break;
