@@ -50,9 +50,9 @@ public class Background {
     public void speedUp(int progress) {
 
         if (progress == 100) {
-            speed = -25;
+            speed = -95;
         }else {
-            speed = -5 - ((progress/10)%10)*2;
+            speed = -5 - ((progress/10)%10)*9;
         }
 
 

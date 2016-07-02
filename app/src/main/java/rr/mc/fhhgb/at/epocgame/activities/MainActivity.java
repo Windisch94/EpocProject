@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         createDatabase();
         //Alert for no Connection
         alertNotConnected = new AlertDialog.Builder(this);
-        alertNotConnected.setMessage("Du bist nicht mit einem EPOC+ Gerät verbunden, trotzdem fortfahren?");
+        alertNotConnected.setMessage("Du bist nicht mit einem EPOC+ Gerät verbunden und kannst daher nicht trainieren!");
 
 
         //Alert for Connection to EPOC+
@@ -198,17 +198,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View _v) {
         switch (_v.getId()) {
             case R.id.buttonPlay: {
-                if(engineConnector == null || !engineConnector.isConnected) {
-                    if(isEPOC) {
-                        alertNotConnected.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent i = new Intent(MainActivity.this, PlayActivity.class);
-                                startActivity(i);
-                            }
-                        });
-                        alertNotConnected.setNegativeButton("Nein",null);
-                        AlertDialog alertDialog = alertNotConnected.create();
+                if (isEPOC) {
+                    if ((!engineConnector.checkTrained(IEmoStateDLL.IEE_MentalCommandAction_t.MC_NEUTRAL.ToInt())
+                            || !engineConnector.checkTrained(IEmoStateDLL.IEE_MentalCommandAction_t.MC_PUSH.ToInt()))) {
+                        android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(
+                                MainActivity.this);
+                        // set title
+                        alertDialogBuilder.setTitle("Unvollständiges Training");
+                        // set dialog message
+                        alertDialogBuilder
+                                .setMessage("Sie müssen zuerst alle zwei Aktionen trainiert haben um spielen zu können!")
+                                .setCancelable(false)
+                                .setNeutralButton("OK",null);
+
+
+                        android.app.AlertDialog alertDialog = alertDialogBuilder.create();
                         alertDialog.show();
                     }else {
                         Intent i = new Intent(MainActivity.this, PlayActivity.class);
@@ -219,27 +223,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Intent i = new Intent(MainActivity.this, PlayActivity.class);
                     startActivity(i);
                 }
+
             }
             break;
 
             case R.id.buttonPractise: {
                 if(engineConnector == null || !engineConnector.isConnected) {
-                    if(isEPOC) {
-                        alertNotConnected.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent i = new Intent(MainActivity.this, PractiseActivity.class);
-                                startActivity(i);
-                            }
-                        });
-                        alertNotConnected.setNegativeButton("Nein",null);
+                        alertNotConnected.setNeutralButton("OK",null);
                         AlertDialog alertDialog = alertNotConnected.create();
                         alertDialog.show();
-                    }else {
-                        Intent i = new Intent(MainActivity.this, PractiseActivity.class);
-                        startActivity(i);
-                    }
-
                 }else {
                     Intent i = new Intent(MainActivity.this, PractiseActivity.class);
                     startActivity(i);

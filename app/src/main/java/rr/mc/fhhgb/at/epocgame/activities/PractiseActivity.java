@@ -300,7 +300,8 @@ public class PractiseActivity extends AppCompatActivity implements EngineInterfa
 
     @Override
     public void trainFailed() {
-        Toast.makeText(this,"Verbindungsfehler",Toast.LENGTH_SHORT).show();
+        Toast.makeText(this,"zu schlechte Verbindung",Toast.LENGTH_SHORT).show();
+        enableUIElements();
         isTraining = false;
     }
 
@@ -350,6 +351,7 @@ public class PractiseActivity extends AppCompatActivity implements EngineInterfa
 
     @Override
     public void currentAction(int typeAction, float power) {
-
+        PlayActivity.currentAction = typeAction;
+        PlayActivity.currentPower = power;
     }
 }

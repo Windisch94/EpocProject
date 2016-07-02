@@ -7,9 +7,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -23,10 +24,17 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import rr.mc.fhhgb.at.epocgame.R;
 import rr.mc.fhhgb.at.epocgame.views.BackgroundView;
 
 public class PlayActivity extends AppCompatActivity {
+
+    static int currentAction;
+    static float currentPower;
+
 
     public TextView distanceTV;
     public TextView timeTV;
@@ -37,6 +45,7 @@ public class PlayActivity extends AppCompatActivity {
     private Runnable decreasePowerProgressRunnable;
     private boolean increase = false;
     private boolean shouldRun = true;
+    private boolean isBackAllowed = true;
     private BackgroundView bgv;
     private ImageView ballImageView;
     private RotateAnimation r;
@@ -45,6 +54,7 @@ public class PlayActivity extends AppCompatActivity {
     private ProgressBar powerProgress;
     private Button startButton;
     private Button nudgeButton;
+    Timer timerListenAction;
 
 
 
@@ -61,8 +71,16 @@ public class PlayActivity extends AppCompatActivity {
         nudgeButton = (Button) findViewById(R.id.nudgeButton);
         if (MainActivity.isEPOC) {
             nudgeButton.setAlpha(0);
+            timerListenAction = new Timer();
+            timerListenAction.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    handlerUpdateUI.sendEmptyMessage(0);
+                }
+            },0,20);
         }
         nudgeButton.setEnabled(false);
+
 
 
         increasePowerProgressRunnable = new Runnable() {
@@ -71,10 +89,6 @@ public class PlayActivity extends AppCompatActivity {
                 if (shouldRun) {
                     if (progressValue <= 100) {
                         if (increase) {
-                        /*ObjectAnimator animation = ObjectAnimator.ofInt(powerProgress, "progress", progressValue);
-                        animation.setDuration(500); // 0.5 second
-                        animation.setInterpolator(new DecelerateInterpolator());
-                        animation.start();*/
                             powerProgress.setProgress(progressValue);
                             progressValue += 2;
                             bgv.getBackgroundModel().speedUp(progressValue);
@@ -129,6 +143,7 @@ public class PlayActivity extends AppCompatActivity {
                 if(!MainActivity.isEPOC) {
                     nudgeButton.setEnabled(true);
                 }
+                isBackAllowed = false;
                 shouldRun = true;
                 bgv.getBackgroundModel().setSpeed(5);
 
@@ -150,7 +165,11 @@ public class PlayActivity extends AppCompatActivity {
                         timeTV.setText("Zeit: 20 sek.");
                         bgv.getBackgroundModel().setSpeed(0);
                         distance = bgv.getBackgroundModel().distance;
+                        isBackAllowed = true;
                         ballImageView.clearAnimation();
+                        if (MainActivity.isEPOC) {
+                            timerListenAction.cancel();
+                        }
                         startButton.setAlpha(1);
                         startButton.setEnabled(true);
                         final String username;
@@ -158,7 +177,7 @@ public class PlayActivity extends AppCompatActivity {
                         username = preferences.getString("Name", "");
                         AlertDialog.Builder doneDialog = new AlertDialog.Builder(PlayActivity.this);
                         doneDialog.setMessage("Gratulation " + username + "! Du hast eine Weite von " + distance + " Metern erreicht!");
-                        doneDialog.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+                        doneDialog.setNeutralButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 SQLiteDatabase highscoreDB = openOrCreateDatabase("HIGHSCORE", MODE_PRIVATE, null);
@@ -182,13 +201,6 @@ public class PlayActivity extends AppCompatActivity {
             }
         });
 
-        nudgeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-            }
-        });
 
 
         nudgeButton.setOnTouchListener(new View.OnTouchListener() {
@@ -205,53 +217,43 @@ public class PlayActivity extends AppCompatActivity {
                 return false;
             }
         });
-        /*nudgeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bgv.getBackgroundModel().speedUp();
-                initRotateAndTranslateAnimation();
-                ballImageView.startAnimation(animationSet);
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        //r.setDuration(500);
-                        *//*try {
-                            *//**//*Thread.sleep(1000);
-                            r.setDuration(700);
-                            Thread.sleep(1000);
-                            r.setDuration(900);
-                            Thread.sleep(1000);
-                            r.setDuration(1100);
-                            Thread.sleep(1000);
-                            r.setDuration(1300);
-                            Thread.sleep(1000);
-                            r.setDuration(1500);*//**//*
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }*//*
 
-                    }
-                }).start();
-
-            }
-        });*/
         initRotateAnimation();
         ballImageView = (ImageView) findViewById(R.id.playBallImage);
 
+
+    }
+    Handler handlerUpdateUI=new Handler(){
+        public void handleMessage(Message msg) {
+            toggleSpeed();
+        }
+    };
+    private void toggleSpeed() {
+        Log.d("Action",currentAction+"");
+        Log.d("Power",currentPower+"");
+        powerProgress.setProgress((int)(currentPower*100));
+
+
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (isBackAllowed) {
+            super.onBackPressed();
+        }
 
     }
 
     protected void onResume() {
         super.onResume();
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
         bgv.resume();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-
         bgv.pause();
     }
 
@@ -267,16 +269,6 @@ public class PlayActivity extends AppCompatActivity {
         animationSet.addAnimation(r);
 
     }
-
-    public void initRotateAndTranslateAnimation() {
-        DisplayMetrics metrics = this.getResources().getDisplayMetrics();
-        t = new TranslateAnimation(0, metrics.widthPixels / 2, 0, 0); // 30 padding
-
-        t.setDuration(2500);
-        t.setRepeatMode(Animation.REVERSE);
-
-        animationSet = new AnimationSet(false);
-        animationSet.addAnimation(r);
-        animationSet.addAnimation(t);
-    }
 }
+
+
