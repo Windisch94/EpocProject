@@ -6,9 +6,11 @@ import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -18,6 +20,7 @@ import android.view.animation.RotateAnimation;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import rr.mc.fhhgb.at.epocgame.R;
@@ -25,14 +28,22 @@ import rr.mc.fhhgb.at.epocgame.views.BackgroundView;
 
 public class PlayActivity extends AppCompatActivity {
 
+    private Handler updatePowerProgressHandler = new Handler();
+    private Runnable increasePowerProgressRunnable;
+    private Runnable decreasePowerProgressRunnable;
+    private boolean increase = false;
+    private boolean shouldRun = true;
+
     public TextView distanceTV;
     public TextView timeTV;
+    int progressValue = 0;
     int distance = 0;
     private BackgroundView bgv;
     private ImageView ballImageView;
     private RotateAnimation r;
     private AnimationSet animationSet;
     private TranslateAnimation t;
+    private ProgressBar powerProgress;
     private Button startButton;
     private Button nudgeButton;
 
@@ -45,19 +56,89 @@ public class PlayActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
-        bgv = (BackgroundView)findViewById(R.id.backgroundView);
+        bgv = (BackgroundView) findViewById(R.id.backgroundView);
         distanceTV = (TextView) findViewById(R.id.distanceTV);
         timeTV = (TextView) findViewById(R.id.timeTV);
         startButton = (Button) findViewById(R.id.startButton);
+        powerProgress = (ProgressBar) findViewById(R.id.progress_bar_play);
+        nudgeButton = (Button) findViewById(R.id.nudgeButton);
+        if (MainActivity.isEPOC) {
+            nudgeButton.setAlpha(0);
+        }
+        nudgeButton.setEnabled(false);
+
+
+        increasePowerProgressRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if (shouldRun) {
+                    if (progressValue <= 100) {
+                        if (increase) {
+                        /*ObjectAnimator animation = ObjectAnimator.ofInt(powerProgress, "progress", progressValue);
+                        animation.setDuration(500); // 0.5 second
+                        animation.setInterpolator(new DecelerateInterpolator());
+                        animation.start();*/
+                            powerProgress.setProgress(progressValue);
+                            progressValue += 2;
+                            bgv.getBackgroundModel().speedUp(progressValue);
+                            updatePowerProgressHandler.postDelayed(this, 50);
+                        }
+
+
+
+
+                    } else {
+
+                        progressValue = 100;
+                        powerProgress.setProgress(progressValue);
+                        bgv.getBackgroundModel().speedUp(progressValue);
+
+                    }
+                }
+
+
+            }
+        };
+
+        decreasePowerProgressRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if (shouldRun) {
+                    if (progressValue >= 0) {
+                        if(!increase) {
+                            powerProgress.setProgress(progressValue);
+                            progressValue -= 2;
+                            bgv.getBackgroundModel().speedUp(progressValue);
+                            updatePowerProgressHandler.postDelayed(this, 50);
+
+                        }
+
+                    } else {
+
+                        progressValue = 0;
+                        powerProgress.setProgress(progressValue);
+                        bgv.getBackgroundModel().speedUp(progressValue);
+
+                    }
+                }
+
+
+            }
+        };
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                    bgv.getBackgroundModel().setSpeed(5);
-                    initRotateAnimation();
-                    ballImageView.startAnimation(animationSet);
-                    startButton.setAlpha(0);
-                    startButton.setEnabled(false);
+                if(!MainActivity.isEPOC) {
+                    nudgeButton.setEnabled(true);
+                }
+                shouldRun = true;
+                bgv.getBackgroundModel().setSpeed(5);
+
+                initRotateAnimation();
+                ballImageView.startAnimation(animationSet);
+                startButton.setAlpha(0);
+                startButton.setEnabled(false);
                 new CountDownTimer(20000, 1000) {
 
                     public void onTick(long millisUntilFinished) {
@@ -76,27 +157,26 @@ public class PlayActivity extends AppCompatActivity {
                         startButton.setAlpha(1);
                         startButton.setEnabled(true);
                         final String username;
-                        SharedPreferences preferences = getSharedPreferences("username",MODE_PRIVATE);
-                        username = preferences.getString("Name","");
+                        SharedPreferences preferences = getSharedPreferences("username", MODE_PRIVATE);
+                        username = preferences.getString("Name", "");
                         AlertDialog.Builder doneDialog = new AlertDialog.Builder(PlayActivity.this);
-                        doneDialog.setMessage("Gratulation "+username+"! Du hast eine Weite von "+distance+" Metern erreicht!");
+                        doneDialog.setMessage("Gratulation " + username + "! Du hast eine Weite von " + distance + " Metern erreicht!");
                         doneDialog.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                SQLiteDatabase highscoreDB = openOrCreateDatabase("HIGHSCORE",MODE_PRIVATE,null);
+                                SQLiteDatabase highscoreDB = openOrCreateDatabase("HIGHSCORE", MODE_PRIVATE, null);
 
-
-                                highscoreDB.execSQL("INSERT INTO HIGHSCORE_DATA VALUES('"+username+"',"+ distance+");");
-                                distance=0;
+                                highscoreDB.execSQL("INSERT INTO HIGHSCORE_DATA VALUES('" + username + "'," + distance + ");");
+                                distance = 0;
+                                finish();
                                 Intent i = new Intent(PlayActivity.this, HighscoreActivity.class);
                                 startActivity(i);
                             }
                         });
                         bgv.getBackgroundModel().distance = 0;
+                        shouldRun = false;
                         AlertDialog alertDialog = doneDialog.create();
                         alertDialog.show();
-
-
 
 
                     }
@@ -104,8 +184,31 @@ public class PlayActivity extends AppCompatActivity {
 
             }
         });
-        nudgeButton = (Button)findViewById(R.id.nudgeButton);
+
         nudgeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+            }
+        });
+
+
+        nudgeButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if ((event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL)) {
+                    increase = false;
+                    updatePowerProgressHandler.post(decreasePowerProgressRunnable);
+
+                }else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    increase = true;
+                    updatePowerProgressHandler.post(increasePowerProgressRunnable);
+                }
+                return false;
+            }
+        });
+        /*nudgeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 bgv.getBackgroundModel().speedUp();
@@ -115,8 +218,8 @@ public class PlayActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         //r.setDuration(500);
-                        /*try {
-                            *//*Thread.sleep(1000);
+                        *//*try {
+                            *//**//*Thread.sleep(1000);
                             r.setDuration(700);
                             Thread.sleep(1000);
                             r.setDuration(900);
@@ -125,22 +228,22 @@ public class PlayActivity extends AppCompatActivity {
                             Thread.sleep(1000);
                             r.setDuration(1300);
                             Thread.sleep(1000);
-                            r.setDuration(1500);*//*
+                            r.setDuration(1500);*//**//*
                         } catch (InterruptedException e) {
                             e.printStackTrace();
-                        }*/
+                        }*//*
 
                     }
                 }).start();
 
             }
-        });
+        });*/
         initRotateAnimation();
         ballImageView = (ImageView) findViewById(R.id.playBallImage);
 
 
-
     }
+
     protected void onResume() {
         super.onResume();
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -154,8 +257,9 @@ public class PlayActivity extends AppCompatActivity {
 
         bgv.pause();
     }
+
     public void initRotateAnimation() {
-        r = new RotateAnimation(0,359, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        r = new RotateAnimation(0, 359, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         r.setInterpolator(new LinearInterpolator());
         r.setRepeatCount(Animation.INFINITE);
         r.setRepeatMode(Animation.RESTART);
@@ -169,7 +273,7 @@ public class PlayActivity extends AppCompatActivity {
 
     public void initRotateAndTranslateAnimation() {
         DisplayMetrics metrics = this.getResources().getDisplayMetrics();
-        t = new TranslateAnimation(0,metrics.widthPixels/2,0,0); // 30 padding
+        t = new TranslateAnimation(0, metrics.widthPixels / 2, 0, 0); // 30 padding
 
         t.setDuration(2500);
         t.setRepeatMode(Animation.REVERSE);

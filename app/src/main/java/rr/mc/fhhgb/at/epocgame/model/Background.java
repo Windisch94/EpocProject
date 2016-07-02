@@ -47,26 +47,15 @@ public class Background {
         return bitmap;
     }
 
-    public void speedUp() {
-        if(speed == -5) {
-            speed = -15;
-            Thread t1= new Thread(new Runnable() {
-                @Override
-                public void run() {
+    public void speedUp(int progress) {
 
-                    for (int i=0;i<5;i++) {
-                        try {
-                            Thread.sleep(1000);
-                            speed +=2;
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                }
-            });
-            t1.start();
+        if (progress == 100) {
+            speed = -25;
+        }else {
+            speed = -5 - ((progress/10)%10)*2;
         }
+
+
 
 
     }

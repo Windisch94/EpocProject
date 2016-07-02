@@ -27,6 +27,7 @@ public class PractiseActivity extends AppCompatActivity implements EngineInterfa
 
 
     private EngineConnector engineConnector;
+
     private RadioGroup radioTypeGroup;
     private RadioButton radioTypeButton;
     private ProgressBar progressBarTraining;

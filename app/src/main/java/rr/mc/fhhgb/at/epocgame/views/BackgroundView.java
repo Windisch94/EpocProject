@@ -74,7 +74,7 @@ public class BackgroundView extends SurfaceView implements Runnable {
                         startTime = System.nanoTime();
                     }
                     if(getDeltaTime(startTime2) > 0.9) {
-                        changetextViewtext("Distanz: "+bg.calculateDistance()+"m");
+                        changeDistanceTV("Distanz: "+bg.calculateDistance()+"m");
                     }
 
                 }
@@ -89,7 +89,7 @@ public class BackgroundView extends SurfaceView implements Runnable {
     private float getDeltaTime(long startTime) {
         return (System.nanoTime() - startTime) / 100000000f;
     }
-    public void changetextViewtext(final String msg){
+    public void changeDistanceTV(final String msg){
         context.runOnUiThread(new Runnable() {
 
             @Override

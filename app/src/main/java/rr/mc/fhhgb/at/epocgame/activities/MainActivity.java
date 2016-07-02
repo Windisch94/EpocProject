@@ -87,13 +87,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if ((username = preferences.getString("Name",null)) != null) {
             usernameTV.setText("Eingeloggt als: "+username);
         }
-        connectionStatus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this,ConnectionActivity.class);
-                startActivity(i);
-            }
-        });
+
 
 
 
@@ -110,6 +104,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     connectionStatus.setTextColor(Color.parseColor("#2E7D32"));
                                     connectionStatus.setText("Verbunden");
                                     connectionStatus.setEnabled(true);
+                                    connectionStatus.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Intent i = new Intent(MainActivity.this,ConnectionActivity.class);
+                                            startActivity(i);
+                                        }
+                                    });
                                     setBatteryStatus(IEmoStateDLL.IS_GetBatteryChargeLevel()[0]);
                                     progressDialog.dismiss();
 
@@ -117,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 } else {
                                     connectionStatus.setTextColor(Color.RED);
                                     connectionStatus.setText("Nicht verbunden");
-                                    // connectionStatus.setEnabled(false);
+                                    connectionStatus.setEnabled(false);
                                     // set state so it doesnt jump in between values
                                     setBatteryStatus(0);
                                     progressDialog.show();
