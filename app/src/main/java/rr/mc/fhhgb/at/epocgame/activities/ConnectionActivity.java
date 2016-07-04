@@ -9,6 +9,10 @@ import android.view.WindowManager;
 
 import rr.mc.fhhgb.at.epocgame.views.EpocQualityView;
 
+/**
+ * Activity for displaying the the signal state of the electrodes
+ * @author Windischhofer, Rohner
+ */
 public class ConnectionActivity extends AppCompatActivity {
 
     @Override
@@ -16,10 +20,9 @@ public class ConnectionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        View v = new EpocQualityView(this, metrics);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); // dont turn off display
+        View v = new EpocQualityView(this, metrics); //custom View
         v.setBackgroundColor(Color.BLACK);
-
         setContentView(v);
 
     }

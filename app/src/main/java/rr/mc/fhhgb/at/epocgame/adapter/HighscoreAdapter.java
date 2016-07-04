@@ -13,7 +13,8 @@ import rr.mc.fhhgb.at.epocgame.R;
 import rr.mc.fhhgb.at.epocgame.model.Player;
 
 /**
- * Created by Windisch on 27.06.2016.
+ * adapter for displaying the highscore list
+ * @author Windischhofer, Rohner
  */
 public class HighscoreAdapter extends BaseAdapter {
 
@@ -21,6 +22,11 @@ public class HighscoreAdapter extends BaseAdapter {
     private List<Player> players;
 
 
+    /**
+     * constructor
+     * @param context context from the superclass
+     * @param players list of players which should be displayed
+     */
     public HighscoreAdapter(Activity context, List<Player> players) {
         super();
         this.context = context;
@@ -101,6 +107,9 @@ public class HighscoreAdapter extends BaseAdapter {
         return convertView;
     }
 
+    /**
+     * inner class for saving the references to the UI-Elements
+     */
     private class ViewHolder {
         TextView username;
         TextView score;

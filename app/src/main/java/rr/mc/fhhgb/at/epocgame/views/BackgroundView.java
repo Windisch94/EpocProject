@@ -8,13 +8,15 @@ import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.widget.TextView;
 
 import rr.mc.fhhgb.at.epocgame.R;
 import rr.mc.fhhgb.at.epocgame.activities.PlayActivity;
 import rr.mc.fhhgb.at.epocgame.model.Background;
 
-
+/**
+ * Class for the running Background
+ * @author Windischhofer, Rohner
+ */
 public class BackgroundView extends SurfaceView implements Runnable {
 
     Background bg;
@@ -22,20 +24,32 @@ public class BackgroundView extends SurfaceView implements Runnable {
     Thread renderThread;
     SurfaceHolder holder;
     volatile boolean running;
-    TextView test;
-    int i =0;
 
 
+    /**
+     * constructor
+     * @param context context from superview
+     */
     public BackgroundView(Context context) {
         super(context);
         init(context);
 
     }
+
+    /**
+     * constructor
+     * @param context context from superview
+     * @param attrs attributeset
+     */
     public BackgroundView(Context context, AttributeSet attrs) {
         super(context,attrs);
         init(context);
     }
 
+    /**
+     * initializes the class
+     * @param context context from superview
+     */
     private void init(Context context) {
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         this.context = (PlayActivity)context;
@@ -46,12 +60,18 @@ public class BackgroundView extends SurfaceView implements Runnable {
 
     }
 
+    /**
+     * if the game resumes
+     */
     public void resume() {
         running = true;
         renderThread = new Thread(this);
         renderThread.start();
     }
 
+    /**
+     * thread running method
+     */
     public void run() {
         long startTime = System.nanoTime();
         long startTime2 = System.nanoTime();
@@ -86,9 +106,19 @@ public class BackgroundView extends SurfaceView implements Runnable {
         }
     }
 
+    /**
+     * calculate time difference from startTime and now
+     * @param startTime the time you want to calculate
+     * @return the time difference
+     */
     private float getDeltaTime(long startTime) {
         return (System.nanoTime() - startTime) / 100000000f;
     }
+
+    /**
+     * changes the Textview of the Distance
+     * @param msg the message you want to show
+     */
     public void changeDistanceTV(final String msg){
         context.runOnUiThread(new Runnable() {
 
@@ -99,6 +129,10 @@ public class BackgroundView extends SurfaceView implements Runnable {
             }
         });
     }
+
+    /**
+     * called if the game got paused
+     */
     public void pause() {
         running = false;
         while (true) {
@@ -113,13 +147,5 @@ public class BackgroundView extends SurfaceView implements Runnable {
 
     public Background getBackgroundModel(){
         return bg;
-    }
-
-    public boolean isRunning() {
-        return running;
-    }
-
-    public void setRunning(boolean running) {
-        this.running = running;
     }
 }

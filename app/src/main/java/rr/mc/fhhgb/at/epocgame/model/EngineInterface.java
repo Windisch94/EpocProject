@@ -1,5 +1,9 @@
 package rr.mc.fhhgb.at.epocgame.model;
 
+/**
+ * Interface for the training
+ * @author Windischhofer, Rohner
+ */
 public interface EngineInterface {
 	//train
 	void trainStarted();

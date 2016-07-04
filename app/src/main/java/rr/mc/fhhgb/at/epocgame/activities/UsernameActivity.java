@@ -10,10 +10,14 @@ import android.widget.EditText;
 
 import rr.mc.fhhgb.at.epocgame.R;
 
+/**
+ * Start Activity
+ * @author Windischhofer, Rohner
+ */
 public class UsernameActivity extends AppCompatActivity implements View.OnClickListener {
 
 
-
+    //UI elements
     EditText nameET;
     Button button;
 
@@ -22,6 +26,7 @@ public class UsernameActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_username);
 
+        //get Username if one exists
         SharedPreferences preferences = getSharedPreferences("username",MODE_PRIVATE);
         String name = preferences.getString("Name",null);
         button = (Button) findViewById(R.id.btnApply);
@@ -37,6 +42,7 @@ public class UsernameActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onClick(View v) {
+        //store new username
         SharedPreferences preferences = getSharedPreferences("username",MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("Name", String.valueOf(nameET.getText()));

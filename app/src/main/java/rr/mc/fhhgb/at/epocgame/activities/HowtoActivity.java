@@ -5,6 +5,10 @@ import android.support.v7.app.AppCompatActivity;
 
 import rr.mc.fhhgb.at.epocgame.R;
 
+/**
+ * Activity for displaying the How-To Page
+ * @author Windischhofer, Rohner
+ */
 public class HowtoActivity extends AppCompatActivity {
 
     @Override

@@ -16,9 +16,13 @@ import rr.mc.fhhgb.at.epocgame.R;
 import rr.mc.fhhgb.at.epocgame.adapter.HighscoreAdapter;
 import rr.mc.fhhgb.at.epocgame.model.Player;
 
+/**
+ * Activity for displaying the highscore list
+ * @author Windischhofer, Rohner
+ */
 public class HighscoreActivity extends AppCompatActivity {
 
-    ArrayList<Player> myPlayers = new ArrayList<Player>();
+    ArrayList<Player> myPlayers = new ArrayList<Player>(); // all Players which are in the highscore listed here
     private Cursor cursor = null;
     private SQLiteDatabase highscoreDB = null;
     private Button clearHighscore;
@@ -42,14 +46,8 @@ public class HighscoreActivity extends AppCompatActivity {
                 highscoreDB.close();
                 highScoreAdapter.notifyDataSetChanged();
 
-
-
-
-
             }
         });
-
-
         try {
             highscoreDB = openOrCreateDatabase("HIGHSCORE",MODE_PRIVATE,null);
             createTable();
@@ -61,18 +59,16 @@ public class HighscoreActivity extends AppCompatActivity {
         {
 
             if (highscoreDB != null)
-                //highscoreDB.execSQL("DELETE FROM HIGHSCORE_DATA");
-            highscoreDB.close();
+                highscoreDB.close();
         }
-
-
         lv = (ListView) findViewById(R.id.highscoreList);
         highScoreAdapter = new HighscoreAdapter(this,myPlayers);
         lv.setAdapter(highScoreAdapter);
-       // lv.setAdapter(new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,results));
-
     }
 
+    /**
+     * puts the data from the database into the list
+     */
     private void lookUpData() {
         myPlayers.clear();
         cursor = highscoreDB.rawQuery("SELECT USERNAME, SCORE FROM HIGHSCORE_DATA ORDER BY SCORE DESC LIMIT 10",null);
@@ -89,9 +85,10 @@ public class HighscoreActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * creates the table if not exists
+     */
     private void createTable() {
        highscoreDB.execSQL("CREATE TABLE IF NOT EXISTS HIGHSCORE_DATA (USERNAME VARCHAR, SCORE INT);");
-        //highscoreDB.execSQL("INSERT INTO HIGHSCORE_DATA VALUES('Max Mustermann',0);");
-        //highscoreDB.execSQL("INSERT INTO HIGHSCORE_DATA VALUES('Linda Musterfrau',0);");
     }
 }

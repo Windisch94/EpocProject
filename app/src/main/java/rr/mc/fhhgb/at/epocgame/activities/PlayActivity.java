@@ -18,7 +18,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
-import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -30,31 +29,39 @@ import java.util.TimerTask;
 import rr.mc.fhhgb.at.epocgame.R;
 import rr.mc.fhhgb.at.epocgame.views.BackgroundView;
 
+/**
+ * Activity for the game
+ * @author Windischhofer, Rohner
+ */
 public class PlayActivity extends AppCompatActivity {
 
-    static int currentAction;
-    static float currentPower;
+    static int currentAction; // EPOC+ currentAction
+    static float currentPower; // EPOC+ currentPower
 
 
     public TextView distanceTV;
     public TextView timeTV;
-    int progressValue = 0;
-    int distance = 0;
-    private Handler updatePowerProgressHandler = new Handler();
-    private Runnable increasePowerProgressRunnable;
-    private Runnable decreasePowerProgressRunnable;
-    private boolean increase = false;
-    private boolean shouldRun = true;
-    private boolean isBackAllowed = true;
-    private BackgroundView bgv;
-    private ImageView ballImageView;
-    private RotateAnimation r;
-    private AnimationSet animationSet;
-    private TranslateAnimation t;
     private ProgressBar powerProgress;
     private Button startButton;
     private Button nudgeButton;
+    private BackgroundView bgv;
+    private ImageView ballImageView;
+
+    private Handler updatePowerProgressHandler = new Handler();
+    private Runnable increasePowerProgressRunnable;
+    private Runnable decreasePowerProgressRunnable;
     Timer timerListenAction;
+
+    private boolean increase = false;
+    private boolean shouldRun = true;
+    private boolean isBackAllowed = true;
+
+    // animation for the ball
+    private RotateAnimation r;
+    private AnimationSet animationSet;
+
+    int progressValue = 0;
+    int distance = 0;
 
 
 

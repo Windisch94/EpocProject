@@ -14,7 +14,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -27,19 +26,27 @@ import java.util.TimerTask;
 import rr.mc.fhhgb.at.epocgame.R;
 import rr.mc.fhhgb.at.epocgame.model.EngineConnector;
 
+/**
+ * Main-Activity
+ * @author Windischhofer, Rohner
+ */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private static final String TAG = "brain2machine";
-    static boolean isEPOC = false;
+    static boolean isEPOC = false; // static variable for saving the state to the EPOC system
+
     int MY_PERMISSIONS_REQUEST_BLUETOOTH;
+    int MY_PERMISSIONS_REQUEST_ACCESSLOCATION;
+
     EngineConnector engineConnector;
+
+    //UI Elements
     TextView batteryStatus;
     TextView connectionStatus;
     TextView usernameTV;
     ProgressDialog progressDialog;
-    int MY_PERMISSIONS_REQUEST_ACCESSLOCATION;
     AlertDialog.Builder alertNotConnected;
     AlertDialog alertDialog;
+
     private boolean isStartedQuality = false;
 
     @Override
@@ -47,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         createDatabase();
+
         //Alert for no Connection
         alertNotConnected = new AlertDialog.Builder(this);
         alertNotConnected.setMessage("Du bist nicht mit einem EPOC+ Gerät verbunden und kannst daher nicht trainieren!");
@@ -76,19 +84,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
         alertDialog = alertDialogBuilder.create();
         alertDialog.show();
+
         accessPermissions(); //access permissions on runtime for android >6.0
+
         batteryStatus = (TextView) findViewById(R.id.batteryText);
         connectionStatus = (TextView) findViewById(R.id.signalText);
         usernameTV = (TextView) findViewById(R.id.usernameTV);
+
+        // get the username of the shared preferences
         SharedPreferences preferences = getSharedPreferences("username",MODE_PRIVATE);
         String username;
         if ((username = preferences.getString("Name",null)) != null) {
             usernameTV.setText("Eingeloggt als: "+username);
         }
 
-
-
-
+        // Timer for connecting to the EPOC+ system
         Timer timer = new Timer();
         TimerTask timerTask = new TimerTask() { // TimerTask für die BatteryConnection
             @Override
@@ -137,9 +147,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             }
         };
-        timer.schedule(timerTask, 0, 1000);
+        timer.schedule(timerTask, 0, 1000); //start timer every second
 
-        //IEdk.IEE_EngineConnect(this,"");
+        //Main buttons
         Button button = null;
         button = (Button) findViewById(R.id.buttonPlay);
         button.setOnClickListener(this);
@@ -149,8 +159,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         button.setOnClickListener(this);
         button = (Button) findViewById(R.id.buttonHighscore);
         button.setOnClickListener(this);
-
-
     }
 
     /**
@@ -163,14 +171,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     /**
-     * Setzt den Batterystatus anhand der ID die geliefert wird
-     * @param id Die ID, die vom System kommt
+     * sets the battery state
+     * @param id the id from the EPOC system
      */
     private void setBatteryStatus(int id) {
         switch (id) {
-            case -1:
-                //batteryStatus.setText("-");
-                break;
             case 0:
                 batteryStatus.setText("-");
                 break;
@@ -236,37 +241,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Intent i = new Intent(MainActivity.this, PractiseActivity.class);
                     startActivity(i);
                 }
-                Log.i(TAG, "Button practise pressed");
 
             }
             break;
 
             case R.id.buttonHowto: {
-                Log.i(TAG, "Button howto pressed");
                 Intent i = new Intent(this, HowtoActivity.class);
                 startActivity(i);
             }
             break;
             case R.id.buttonHighscore: {
-                Log.i(TAG, "Button highscore pressed");
                 Intent i = new Intent(this, HighscoreActivity.class);
                 startActivity(i);
             }
             break;
             default:
-                Log.e(TAG, "unknown onClick ID encountered..");
+
         }
 
     }
 
 
-
-
-
-
-
-
-
+    /**
+     * access the Permissions for bluetooth android > 6.0
+     */
     private void accessPermissions() {
         // Request & set Permissions
         //Bluetooth
