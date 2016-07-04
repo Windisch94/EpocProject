@@ -7,79 +7,79 @@
 
     <rr.mc.fhhgb.at.epocgame.views.BackgroundView
         android:id="@+id/backgroundView"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent"/>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
     <Button
+        android:id="@+id/startButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start"
-        android:id="@+id/startButton"
+        android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:text="Start" />
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
-        android:paddingBottom="30dp"
-        android:id="@+id/linearLayout">
+        android:layout_alignParentLeft="true"
+        android:paddingBottom="30dp">
         <ImageView
+            android:id="@+id/playBallImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/playBallImage"
-            android:background="@drawable/ball_practise"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
+            android:background="@drawable/ball_practise"
             />
     </LinearLayout>
 
     <Button
+        android:id="@+id/nudgeButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Schneller"
-        android:id="@+id/nudgeButton"
         android:layout_above="@+id/startButton"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:text="Schneller" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/distanceTV"
-        android:text="Distanz: 0m"
-        android:layout_alignParentLeft="true"
-        android:textSize="25sp"
-        android:layout_alignParentStart="true"
-        android:textStyle="bold"
-        android:paddingLeft="10dp"
-        android:paddingTop="10dp"/>
-    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/timeTV"
-        android:text="Zeit: 20 sek."
-        android:layout_alignParentRight="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:text="Distanz: 0m"
         android:textSize="25sp"
-        android:textStyle="bold"
+        android:textStyle="bold" />
+    <TextView
+        android:id="@+id/timeTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
         android:paddingRight="10dp"
-        android:paddingTop="10dp"/>
+        android:paddingTop="10dp"
+        android:text="Zeit: 20 sek."
+        android:textSize="25sp"
+        android:textStyle="bold" />
 
     <ProgressBar
+        android:id="@+id/progress_bar_play"
         style="@android:style/Widget.ProgressBar.Horizontal"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:max="100"
-        android:id="@+id/progress_bar_play"
-        android:progress="0"
-        android:progressDrawable="@drawable/progress_drawable"
-        android:paddingTop="100dp"
-        android:paddingBottom="100dp"
-        android:layout_marginRight="40dp"
-        android:layout_marginEnd="40dp"
-        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:max="100"
+        android:paddingBottom="100dp"
+        android:paddingTop="100dp"
+        android:progress="0"
+        android:progressDrawable="@drawable/progress_drawable" />
 
 
 </RelativeLayout>

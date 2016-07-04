@@ -106,7 +106,8 @@ Sobald Sie bereit sind können Sie das Spiel mit dem "START"-Button beginnen.
 Diese können Sie auch jederzeit unter "HIGHSCORE" anschauen.
 \n
 \nSCHRITT 5:
-\nWenn Sie ein neues Spiel beginnen wollen wiederholen sie SCHRITT 1</string>
+\nWenn Sie ein neues Spiel beginnen wollen wiederholen sie SCHRITT 2.
+    \nSollte beim Spiel kein Impuls ausgelöst werden trainieren Sie einfach noch einmal.</string>
     <string name="pref_title_system_sync_settings">System sync settings</string>
 
     <!-- Example settings for Notifications -->

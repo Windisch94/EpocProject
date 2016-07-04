@@ -32,7 +32,6 @@ public class UsernameActivity extends AppCompatActivity implements View.OnClickL
         if (name != null) {
             nameET.setText(name);
         }
-
     }
 
 
