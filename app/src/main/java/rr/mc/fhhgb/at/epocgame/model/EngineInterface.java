@@ -5,7 +5,7 @@ package rr.mc.fhhgb.at.epocgame.model;
  * @author Windischhofer, Rohner
  */
 public interface EngineInterface {
-	//train
+
 	void trainStarted();
 
 	void trainSucceed();

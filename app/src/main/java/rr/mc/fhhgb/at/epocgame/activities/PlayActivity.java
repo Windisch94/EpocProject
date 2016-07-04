@@ -10,7 +10,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -39,6 +38,7 @@ public class PlayActivity extends AppCompatActivity {
     static float currentPower; // EPOC+ currentPower
 
 
+    //UI elements
     public TextView distanceTV;
     public TextView timeTV;
     private ProgressBar powerProgress;
@@ -70,12 +70,18 @@ public class PlayActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
+        initRotateAnimation();
+        nudgeButton.setEnabled(false);
+
         bgv = (BackgroundView) findViewById(R.id.backgroundView);
         distanceTV = (TextView) findViewById(R.id.distanceTV);
         timeTV = (TextView) findViewById(R.id.timeTV);
         startButton = (Button) findViewById(R.id.startButton);
         powerProgress = (ProgressBar) findViewById(R.id.progress_bar_play);
         nudgeButton = (Button) findViewById(R.id.nudgeButton);
+        ballImageView = (ImageView) findViewById(R.id.playBallImage);
+
+        //deactivate button if EPOC is connected and start the timer for updating the UI
         if (MainActivity.isEPOC) {
             nudgeButton.setAlpha(0);
             timerListenAction = new Timer();
@@ -86,8 +92,6 @@ public class PlayActivity extends AppCompatActivity {
                 }
             },0,20);
         }
-        nudgeButton.setEnabled(false);
-
 
 
         increasePowerProgressRunnable = new Runnable() {
@@ -143,6 +147,7 @@ public class PlayActivity extends AppCompatActivity {
 
             }
         };
+
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -153,19 +158,13 @@ public class PlayActivity extends AppCompatActivity {
                 isBackAllowed = false;
                 shouldRun = true;
                 bgv.getBackgroundModel().setSpeed(5);
-
                 initRotateAnimation();
                 ballImageView.startAnimation(animationSet);
                 startButton.setAlpha(0);
                 startButton.setEnabled(false);
                 new CountDownTimer(20000, 1000) {
-
                     public void onTick(long millisUntilFinished) {
-
-
                         timeTV.setText("Zeit: " + millisUntilFinished / 1000 + "sek.");
-
-
                     }
 
                     public void onFinish() {
@@ -188,7 +187,6 @@ public class PlayActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 SQLiteDatabase highscoreDB = openOrCreateDatabase("HIGHSCORE", MODE_PRIVATE, null);
-
                                 highscoreDB.execSQL("INSERT INTO HIGHSCORE_DATA VALUES('" + username + "'," + distance + ");");
                                 distance = 0;
                                 finish();
@@ -208,15 +206,14 @@ public class PlayActivity extends AppCompatActivity {
             }
         });
 
-
-
         nudgeButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                //button released
                 if ((event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL)) {
                     increase = false;
                     updatePowerProgressHandler.post(decreasePowerProgressRunnable);
-
+                    // button pressed
                 }else if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     increase = true;
                     updatePowerProgressHandler.post(increasePowerProgressRunnable);
@@ -224,24 +221,20 @@ public class PlayActivity extends AppCompatActivity {
                 return false;
             }
         });
-
-        initRotateAnimation();
-        ballImageView = (ImageView) findViewById(R.id.playBallImage);
-
-
     }
+
+    // handler for updating the view
     Handler handlerUpdateUI=new Handler(){
         public void handleMessage(Message msg) {
             toggleSpeed();
         }
     };
+
+    /**
+     * toggles the speed in case of the epoc+ strength
+     */
     private void toggleSpeed() {
-        Log.d("Action",currentAction+"");
-        Log.d("Power",currentPower+"");
         powerProgress.setProgress((int)(currentPower*100));
-
-
-
     }
 
     @Override
@@ -252,6 +245,9 @@ public class PlayActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * if app gets resumed
+     */
     protected void onResume() {
         super.onResume();
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -264,6 +260,9 @@ public class PlayActivity extends AppCompatActivity {
         bgv.pause();
     }
 
+    /**
+     * initialize the rotate animation for the ball
+     */
     public void initRotateAnimation() {
         r = new RotateAnimation(0, 359, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         r.setInterpolator(new LinearInterpolator());

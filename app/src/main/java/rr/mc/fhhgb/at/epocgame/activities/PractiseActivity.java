@@ -37,22 +37,29 @@ public class PractiseActivity extends AppCompatActivity implements EngineInterfa
 
     private EngineConnector engineConnector;
 
+    // UI elements
     private RadioGroup radioTypeGroup;
     private RadioButton radioTypeButton;
     private ProgressBar progressBarTraining;
-    private boolean isBackAllowed = true;
     private Button btn_train;
     private Button btn_clear;
     private ImageView ballImage;
+
+    // animation for the ball
     private AnimationSet animationSet;
     private RotateAnimation r;
     private TranslateAnimation t;
-    boolean isTraining = false;
+
+
     private TimerTask timerTask;
     private Timer timer;
+
+    private boolean isBackAllowed = true;
+    boolean isTraining = false;
     int userId = 0;
     int count =0;
 
+    //handler for updating the progressbar
     Handler handlerUpdateUI=new Handler(){
         public void handleMessage(Message msg) {
                     count ++;
@@ -66,6 +73,9 @@ public class PractiseActivity extends AppCompatActivity implements EngineInterfa
         };
     };
 
+    /**
+     * sets the count to 0 and reinitializes the timerTask
+     */
     public void setTimerTask()
     {
         count = 0;
@@ -82,17 +92,18 @@ public class PractiseActivity extends AppCompatActivity implements EngineInterfa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_practise);
-        ballImage = (ImageView) findViewById(R.id.ballPractise);
+
         engineConnector = EngineConnector.shareInstance();
         engineConnector.delegate = this;
 
-
-
-
+        ballImage = (ImageView) findViewById(R.id.ballPractise);
         btn_train = (Button) findViewById(R.id.button_training);
         btn_clear = (Button) findViewById(R.id.clearTrainingButton);
         radioTypeGroup = (RadioGroup) findViewById(R.id.radioGroup_training);
         radioTypeButton = (RadioButton) findViewById(R.id.radio_neutral);
+        progressBarTraining = (ProgressBar) findViewById(R.id.progress_bar);
+
+        //sets the background color if training already happened
         if (engineConnector.checkTrained(IEmoStateDLL.IEE_MentalCommandAction_t.MC_NEUTRAL.ToInt())) {
             radioTypeButton.setBackgroundColor(Color.GREEN);
         }
@@ -101,7 +112,7 @@ public class PractiseActivity extends AppCompatActivity implements EngineInterfa
             radioTypeButton.setBackgroundColor(Color.GREEN);
         }
 
-        progressBarTraining = (ProgressBar) findViewById(R.id.progress_bar);
+
 
 
         btn_train.setOnClickListener(new View.OnClickListener() {
@@ -125,12 +136,6 @@ public class PractiseActivity extends AppCompatActivity implements EngineInterfa
                             }
                         }
                     }
-
-
-
-
-
-
             }
         });
 
@@ -150,24 +155,31 @@ public class PractiseActivity extends AppCompatActivity implements EngineInterfa
 
     }
 
+    /**
+     * starts the training in the EPOC+ system
+     * @param mcNeutral the training which should be started
+     * @see com.emotiv.insight.IEmoStateDLL.IEE_MentalCommandAction_t
+     */
     private void startTraining(IEmoStateDLL.IEE_MentalCommandAction_t mcNeutral) {
         isTraining = engineConnector.startTrainingMetalcommand(isTraining,mcNeutral);
 
     }
 
+    /**
+     * disables all the UI elements
+     */
     public void disableUIElements() {
-
         isBackAllowed = false;
         btn_clear.setEnabled(false);
         btn_train.setEnabled(false);
         for (int i = 0; i < radioTypeGroup.getChildCount(); i++) {
             radioTypeGroup.getChildAt(i).setEnabled(false);
         }
-
-
-
     }
 
+    /**
+     * enables all the UI elements
+     */
     public void enableUIElements() {
         isBackAllowed = true;
         btn_clear.setEnabled(true);
@@ -250,8 +262,6 @@ public class PractiseActivity extends AppCompatActivity implements EngineInterfa
             }else {
                 super.onBackPressed();
             }
-
-
         }
 
     }
